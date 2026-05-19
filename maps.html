@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maps — Geography Project</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --earth:#2d4a3e;--sand:#e8d5b0;--clay:#c4703a;--mist:#f0ece3;--ink:#1a1a1a;--accent:#7eb89a; }
+  * { margin:0;padding:0;box-sizing:border-box; }
+  body { background:var(--mist); font-family:'DM Sans',sans-serif; color:var(--ink); }
+  nav { background:var(--earth); padding:14px 30px; }
+  nav a { color:var(--sand); text-decoration:none; font-size:0.85rem; letter-spacing:0.08em; }
+  .page-title { background:var(--clay); color:white; padding:30px 40px; }
+  .page-title small { font-size:0.8rem; opacity:0.8; letter-spacing:0.1em; text-transform:uppercase; }
+  .page-title h1 { font-family:'Playfair Display',serif; font-size:2rem; margin-top:6px; }
+  .container { max-width:960px; margin:30px auto; padding:0 20px 60px; }
+  .note { background:#fff8e1; border-left:4px solid #f5c842; padding:12px 16px; border-radius:3px; font-size:0.85rem; color:#555; margin-bottom:24px; }
+  .maps-grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  .map-slot { background:white; border-radius:6px; box-shadow:0 2px 12px rgba(0,0,0,0.07); overflow:hidden; }
+  .map-slot-header { background:var(--earth); color:var(--sand); padding:14px 20px; display:flex; align-items:center; gap:10px; }
+  .map-slot-header input { background:transparent; border:none; color:var(--sand); font-family:'Playfair Display',serif; font-size:1rem; flex:1; }
+  .map-slot-header input:focus { outline:none; border-bottom:1px solid var(--accent); }
+  .map-slot-header input::placeholder { color:rgba(255,255,255,0.4); }
+  .map-area { position:relative; min-height:260px; display:flex; align-items:center; justify-content:center; background:#f0ece3; border:3px dashed #c5bfb2; margin:16px; border-radius:4px; cursor:pointer; transition:background 0.2s; }
+  .map-area:hover { background:#e8e3d8; }
+  .map-area img { width:100%; height:100%; object-fit:contain; display:block; border-radius:3px; }
+  .map-area .placeholder-text { text-align:center; color:#bbb; }
+  .map-area .placeholder-text .icon { font-size:2.5rem; display:block; margin-bottom:8px; }
+  .map-area .placeholder-text p { font-size:0.85rem; line-height:1.5; }
+  .map-area input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+  .map-caption { padding:0 16px 16px; }
+  .map-caption textarea { width:100%; border:1.5px dashed #ccc; border-radius:3px; padding:9px 12px; font-size:0.84rem; font-family:'DM Sans',sans-serif; resize:vertical; min-height:60px; background:#fafafa; color:#aaa; font-style:italic; }
+  .map-caption textarea:focus { outline:none; border-color:var(--accent); background:white; color:var(--ink); font-style:normal; }
+  .clear-btn { background:none; border:none; cursor:pointer; color:var(--accent); font-size:0.78rem; margin-left:auto; display:block; padding:4px 0; }
+  @media(max-width:640px) { .maps-grid { grid-template-columns:1fr; } }
+  @media print { nav,.note { display:none; } body{background:white;} .map-slot{box-shadow:none;border:1px solid #ddd;} }
+</style>
+<style>
+  .edit-only { display: none; }
+  body[data-edit-mode="off"] .map-area input[type=file] { display: none; }
+  body[data-edit-mode="off"] .clear-btn { display: none !important; }
+  body[data-edit-mode="off"] .map-slot-header input { pointer-events: none; }
+  body[data-edit-mode="off"] .map-caption textarea { pointer-events: none; color: var(--ink); font-style: normal; background: #fafafa; }
+</style>
+<script src="auth.js" defer></script>
+</head>
+<body>
+<nav><a href="index.html">← Back to Project Hub</a></nav>
+<div class="page-title">
+  <small>Genre 6</small>
+  <h1>🗺️ Maps</h1>
+</div>
+
+<div class="container">
+  <div class="edit-only">
+  <div class="note">💡 <strong>How to insert maps:</strong> Click any dashed box to upload an image from your computer. Edit the map title and caption below each one. Print the page when done. Maps can include physical, political, climate, population, or resource maps.</div>
+  </div>
+
+  <div class="maps-grid" id="maps-grid">
+    <!-- filled by JS -->
+  </div>
+</div>
+
+<script>
+const mapDefs = [
+  { title: 'Physical / Topographic Map', caption: 'Describe what this map shows — landforms, elevation, terrain features. Explain how the physical landscape influences life in the region.' },
+  { title: 'Political / Regional Map', caption: 'Identify country borders, major cities, capitals. Note any significant geopolitical relationships or contested areas.' },
+  { title: 'Climate / Biome Map', caption: 'Label climate zones or biomes visible on this map. Explain how climate affects agriculture, settlement, and daily life.' },
+  { title: 'Population / Human Activity Map', caption: 'Describe settlement patterns, population density, or economic activity. Connect human distribution to the physical environment.' },
+];
+
+let images = JSON.parse(localStorage.getItem('geo-maps-images') || '{}');
+let captions = JSON.parse(localStorage.getItem('geo-maps-captions') || '{}');
+let titles = JSON.parse(localStorage.getItem('geo-maps-titles') || '{}');
+
+function render() {
+  const grid = document.getElementById('maps-grid');
+  grid.innerHTML = '';
+  mapDefs.forEach((m, i) => {
+    const imgSrc = images[i] || '';
+    const cap = captions[i] !== undefined ? captions[i] : m.caption;
+    const title = titles[i] !== undefined ? titles[i] : m.title;
+    grid.innerHTML += `
+    <div class="map-slot">
+      <div class="map-slot-header">
+        <span>🗺️</span>
+        <input type="text" value="${title}" placeholder="Map Title" onchange="titles[${i}]=this.value;save()">
+      </div>
+      <div class="map-area" id="area-${i}">
+        ${imgSrc
+          ? `<img src="${imgSrc}" alt="Map ${i+1}"><button onclick="clearImg(${i})" class="clear-btn" style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.85);border:none;border-radius:3px;padding:3px 8px;cursor:pointer;font-size:0.78rem;color:#c0392b;">✕ Remove</button>`
+          : `<div class="placeholder-text"><span class="icon">🖼️</span><p>Click to upload a map image<br><span style="color:#ccc;font-size:0.78rem">(JPG, PNG, GIF)</span></p></div><input type="file" accept="image/*" onchange="loadImg(event,${i})">`
+        }
+      </div>
+      <div class="map-caption">
+        <textarea placeholder="Write your map caption and analysis here..." onchange="captions[${i}]=this.value;save()">${cap}</textarea>
+      </div>
+    </div>`;
+  });
+}
+
+function loadImg(event, i) {
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => { images[i] = e.target.result; save(); render(); };
+  reader.readAsDataURL(file);
+}
+
+function clearImg(i) { delete images[i]; save(); render(); }
+
+function save() {
+  try {
+    localStorage.setItem('geo-maps-images', JSON.stringify(images));
+    localStorage.setItem('geo-maps-captions', JSON.stringify(captions));
+    localStorage.setItem('geo-maps-titles', JSON.stringify(titles));
+  } catch(e) { console.warn('Storage full — images may not persist'); }
+}
+
+render();
+</script>
+</body>
+</html>

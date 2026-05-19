@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geography Project Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --earth: #1e3f32;
+    --sand: #3f1010;
+    --clay: #1f1f1f;
+    --mist: #4c4c4c;
+    --ink: #1a1a1a;
+    --accent: #ffffff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--mist);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  header {
+    background: var(--earth);
+    color: var(--sand);
+    padding: 60px 40px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '🌍';
+    position: absolute;
+    font-size: 220px;
+    right: -20px;
+    top: -40px;
+    opacity: 0.08;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    max-width: 700px;
+  }
+  header p {
+    margin-top: 12px;
+    color: var(--accent);
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .essential-q {
+    background: var(--clay);
+    color: white;
+    padding: 16px 40px;
+    font-size: 0.95rem;
+    font-style: italic;
+  }
+  .essential-q strong { font-style: normal; font-weight: 500; }
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 50px 30px;
+  }
+  .section-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--clay);
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .card {
+    background: white;
+    border-radius: 4px;
+    padding: 30px;
+    text-decoration: none;
+    color: var(--ink);
+    border: 2px solid transparent;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--earth);
+    transform: scaleX(0);
+    transition: transform 0.25s ease;
+    transform-origin: left;
+  }
+  .card:hover { border-color: var(--earth); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(45,74,62,0.12); }
+  .card:hover::after { transform: scaleX(1); }
+  .card-icon { font-size: 2.2rem; margin-bottom: 14px; display: block; }
+  .card h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 8px; }
+  .card p { font-size: 0.88rem; color: #666; line-height: 1.5; }
+  .card .tag {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 0.72rem;
+    background: var(--mist);
+    color: var(--earth);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+  footer {
+    text-align: center;
+    padding: 30px;
+    color: #999;
+    font-size: 0.8rem;
+    border-top: 1px solid #e0ddd6;
+    margin-top: 40px;
+  }
+</style>
+<script src="auth.js" defer></script>
+</head>
+<body>
+
+<nav style="background:#2d4a3e;padding:10px 30px;"></nav>
+<header>
+  <p>Geography Project</p>
+  <h1>How Physical & Human Systems Shape a Place</h1>
+</header>
+
+<div class="essential-q">
+  <strong>Essential Question:</strong> How do physical and human systems interact to define a region's identity, challenges, and opportunities?
+  <span id="view-mode-badge" style="float:right;font-size:0.78rem;background:rgba(255,255,255,0.15);
+    padding:3px 10px;border-radius:10px;font-style:normal;letter-spacing:0.05em;"></span>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const badge = document.getElementById('view-mode-badge');
+  const update = () => {
+    const on = document.body.dataset.editMode === 'on';
+    badge.textContent = on ? '✏️ Edit Mode Active' : '👁 View Mode';
+    badge.style.background = on ? 'rgba(126,184,154,0.3)' : 'rgba(255,255,255,0.15)';
+  };
+  new MutationObserver(update).observe(document.body, { attributes: true, attributeFilter: ['data-edit-mode'] });
+});
+</script>
+
+<main>
+  <p class="section-label">Project Components</p>
+  <div class="grid">
+
+    <a href="pamphlet.html" class="card">
+      <span class="card-icon">📄</span>
+      <h2>Pamphlet</h2>
+      <p>A tri-fold informational brochure covering key geographic facts and highlights.</p>
+      <span class="tag">1</span>
+    </a>
+
+    <a href="report.html" class="card">
+      <span class="card-icon">🔬</span>
+      <h2>Research Report</h2>
+      <p>A structured science/research report analyzing physical and human systems in depth.</p>
+      <span class="tag">Genre 2</span>
+    </a>
+
+    <a href="crossword.html" class="card">
+      <span class="card-icon">✏️</span>
+      <h2>Crossword Puzzle</h2>
+      <p>An interactive crossword with editable clues and answers tied to geography vocab.</p>
+      <span class="tag">Genre 3 · Editable</span>
+    </a>
+
+    <a href="quiz.html" class="card">
+      <span class="card-icon">📋</span>
+      <h2>Quiz / Test</h2>
+      <p>A multiple-choice and short-answer test covering project content — fully editable.</p>
+      <span class="tag">Genre 4 · Editable</span>
+    </a>
+
+    <a href="todo.html" class="card">
+      <span class="card-icon">✅</span>
+      <h2>To-Do List</h2>
+      <p>A thematic to-do list representing actions or steps related to the region studied.</p>
+      <span class="tag">Genre 5 · Editable</span>
+    </a>
+
+    <a href="maps.html" class="card">
+      <span class="card-icon">🗺️</span>
+      <h2>Maps</h2>
+      <p>Map placeholders ready for you to insert physical and political geography visuals.</p>
+      <span class="tag">Genre 6 · Insert Maps</span>
+    </a>
+
+  </div>
+</main>
+
+<footer>Multi-Genre Geography Project &nbsp;·&nbsp; 30 Points Total &nbsp;·&nbsp; All pages open in the same folder</footer>
+</body>
+</html>

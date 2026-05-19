@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crossword — Geography Project</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --earth:#2d4a3e; --sand:#e8d5b0; --clay:#c4703a;
+    --mist:#f0ece3; --ink:#1a1a1a; --accent:#7eb89a;
+    --cell:38px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--mist);font-family:'DM Sans',sans-serif;color:var(--ink);}
+  nav{background:var(--earth);padding:14px 30px;}
+  nav a{color:var(--sand);text-decoration:none;font-size:0.85rem;letter-spacing:0.08em;}
+  nav a:hover{color:var(--accent);}
+  .page-title{background:var(--clay);color:white;padding:30px 40px;}
+  .page-title small{font-size:0.8rem;opacity:0.8;letter-spacing:0.1em;text-transform:uppercase;}
+  .page-title h1{font-family:'Playfair Display',serif;font-size:2rem;margin-top:6px;}
+  .container{max-width:1100px;margin:30px auto;padding:0 20px 80px;}
+
+  /* Editor sections — hidden by default, shown via body attribute set by auth.js */
+  .edit-only { display: none; }
+  body[data-edit-mode="on"] .edit-only { display: block; }
+
+  /* EDITOR */
+  .editor-panel{background:white;border-radius:8px;padding:28px;margin-bottom:28px;
+    box-shadow:0 2px 16px rgba(0,0,0,0.08);}
+  .editor-panel h2{font-family:'Playfair Display',serif;font-size:1.25rem;
+    color:var(--earth);margin-bottom:6px;}
+  .editor-panel .sub{font-size:0.82rem;color:#888;margin-bottom:20px;}
+  .col-labels{display:grid;grid-template-columns:160px 1fr 32px;gap:10px;
+    padding:0 0 6px;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;
+    color:#aaa;font-weight:600;}
+  .word-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+  .word-row{display:grid;grid-template-columns:160px 1fr 32px;gap:10px;align-items:center;}
+  .word-row input{border:1.5px solid #e0ddd6;border-radius:4px;padding:9px 12px;
+    font-family:'DM Sans',sans-serif;font-size:0.88rem;background:#fafafa;
+    transition:border-color 0.15s;}
+  .word-row input:focus{outline:none;border-color:var(--accent);background:#fff;}
+  .word-row input.ans{text-transform:uppercase;font-weight:700;letter-spacing:0.1em;
+    color:var(--earth);font-size:0.85rem;}
+  .del-btn{background:none;border:none;color:#ccc;font-size:1.1rem;cursor:pointer;
+    padding:4px;border-radius:3px;line-height:1;transition:color 0.15s;}
+  .del-btn:hover{color:#c0392b;}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:4px;
+    font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:500;cursor:pointer;
+    border:none;transition:all 0.18s;}
+  .btn-primary{background:var(--earth);color:white;}
+  .btn-primary:hover{background:#1f3329;}
+  .btn-secondary{background:var(--mist);color:var(--ink);border:1.5px solid #ccc;}
+  .btn-secondary:hover{background:#e5e0d5;}
+  .btn-sm{padding:7px 14px;font-size:0.82rem;}
+  .editor-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;}
+
+  /* STATUS */
+  .status-bar{padding:12px 16px;border-radius:4px;font-size:0.85rem;margin-bottom:20px;display:none;}
+  .status-bar.error{background:#fdecea;border-left:4px solid #e74c3c;color:#c0392b;display:block;}
+  .status-bar.success{background:#e8f5ee;border-left:4px solid var(--accent);color:var(--earth);display:block;}
+
+  /* PUZZLE LAYOUT */
+  .puzzle-wrap{display:grid;grid-template-columns:auto 300px;gap:28px;align-items:start;}
+  @media(max-width:820px){.puzzle-wrap{grid-template-columns:1fr;}}
+
+  /* GRID */
+  .grid-outer{background:white;border-radius:8px;padding:24px;
+    box-shadow:0 2px 16px rgba(0,0,0,0.08);overflow:auto;}
+  .grid-outer h2{font-family:'Playfair Display',serif;font-size:1.1rem;
+    color:var(--earth);margin-bottom:16px;}
+  #cw-grid{display:inline-grid;border:2px solid #2a2a2a;line-height:0;background:#2a2a2a;gap:1px;}
+
+  .cell{
+    width:var(--cell);height:var(--cell);
+    background:#fff;position:relative;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .cell.black{background:#2a2a2a;}
+  .cell.hl{background:#d4edda;}
+  .cell.active-cell{background:#7eb89a;}
+  .cell.correct{background:#c8ecd4;}
+  .cell.wrong{background:#fde8e8;}
+  .cell-num{
+    position:absolute;top:1px;left:2px;
+    font-size:8px;font-weight:700;color:#333;line-height:1;
+    pointer-events:none;user-select:none;
+  }
+  .cell input{
+    position:absolute;inset:0;width:100%;height:100%;
+    border:none;text-align:center;
+    font-size:1.05rem;font-weight:800;
+    text-transform:uppercase;background:transparent;
+    font-family:'DM Sans',sans-serif;cursor:pointer;
+    color:var(--ink);caret-color:transparent;
+    z-index:1;
+  }
+  .cell input:focus{outline:none;}
+  .cell.correct input{color:var(--earth);}
+  .cell.wrong input{color:#c0392b;}
+
+  /* EMPTY */
+  .grid-empty{background:white;border-radius:8px;padding:60px 40px;text-align:center;
+    box-shadow:0 2px 16px rgba(0,0,0,0.08);color:#ccc;}
+  .grid-empty .icon{font-size:3.5rem;display:block;margin-bottom:14px;}
+  .grid-empty p{font-size:0.95rem;}
+
+  /* CLUES */
+  .clue-panel{background:white;border-radius:8px;padding:22px;
+    box-shadow:0 2px 16px rgba(0,0,0,0.08);max-height:80vh;overflow-y:auto;}
+  .clue-panel h2{font-family:'Playfair Display',serif;font-size:1.1rem;
+    color:var(--earth);margin-bottom:14px;}
+  .clue-section{margin-bottom:18px;}
+  .clue-section h3{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.14em;
+    color:var(--clay);font-weight:700;margin-bottom:8px;padding-bottom:5px;
+    border-bottom:2px solid var(--sand);}
+  .clue-item{display:flex;gap:8px;padding:6px 9px;border-radius:4px;
+    font-size:0.83rem;line-height:1.4;cursor:pointer;transition:background 0.13s;}
+  .clue-item:hover{background:#f5f2ec;}
+  .clue-item.active-clue{background:#e8f5ee;}
+  .clue-num{font-weight:700;color:var(--clay);min-width:20px;flex-shrink:0;font-size:0.8rem;}
+
+  /* TOOLBAR */
+  .player-toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;align-items:center;}
+  #score-display{font-size:0.82rem;color:#888;margin-left:4px;}
+
+  @media print{
+    nav,.editor-panel,.player-toolbar,.status-bar,.edit-only{display:none!important;}
+    body{background:white;}
+    .grid-outer,.clue-panel{box-shadow:none;border:1px solid #ddd;}
+    .cell input{color:transparent!important;}
+    .puzzle-wrap{display:grid;grid-template-columns:auto 280px;gap:20px;}
+  }
+</style>
+</head>
+<body>
+<nav><a href="index.html">← Back to Project Hub</a></nav>
+<div class="page-title">
+  <small>Genre 3</small>
+  <h1>✏️ Crossword Puzzle</h1>
+</div>
+
+<div class="container">
+
+  <div class="edit-only">
+    <div class="editor-panel">
+      <h2>⚙️ Word &amp; Clue Editor</h2>
+      <p class="sub">Type each answer and its clue, then click <strong>Generate Crossword</strong>. The puzzle builds itself.</p>
+      <div class="col-labels"><span>Answer</span><span>Clue / Hint</span><span></span></div>
+      <div class="word-rows" id="word-rows"></div>
+      <div class="editor-actions">
+        <button class="btn btn-secondary btn-sm" onclick="addWordRow()">＋ Add Word</button>
+        <button class="btn btn-primary" onclick="buildCrossword()">⚙ Generate Crossword</button>
+        <button class="btn btn-secondary btn-sm" onclick="saveData()">💾 Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="status-bar" id="status"></div>
+
+  <div class="player-toolbar" id="player-toolbar" style="display:none">
+    <button class="btn btn-secondary btn-sm" onclick="checkAnswers()">✓ Check Answers</button>
+    <button class="btn btn-secondary btn-sm" onclick="revealAll()">👁 Reveal All</button>
+    <button class="btn btn-secondary btn-sm" onclick="clearAnswers()">↺ Clear</button>
+    <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨 Print</button>
+    <span id="score-display"></span>
+  </div>
+
+  <div id="puzzle-wrap" class="puzzle-wrap" style="display:none">
+    <div class="grid-outer">
+      <h2>Puzzle</h2>
+      <div id="cw-grid"></div>
+    </div>
+    <div class="clue-panel">
+      <h2>Clues</h2>
+      <div class="clue-section">
+        <h3>Across</h3>
+        <div id="across-clues"></div>
+      </div>
+      <div class="clue-section">
+        <h3>Down</h3>
+        <div id="down-clues"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="empty-state" class="grid-empty" style="display:none">
+    <span class="icon">✏️</span>
+    <p>No crossword yet.<br>
+      <span id="empty-hint" style="color:#bbb;font-size:0.88rem;">Log in as editor to create one.</span>
+    </p>
+  </div>
+
+</div>
+
+<script src="auth.js"></script>
+<script>
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+let wordList   = JSON.parse(localStorage.getItem('geo-cw-words')  || 'null') || [
+  {answer:'CLIMATE',  clue:'Long-term weather patterns of a region'},
+  {answer:'BIOME',    clue:'A large ecological community of plants and animals'},
+  {answer:'LATITUDE', clue:'Distance north or south of the equator'},
+  {answer:'EROSION',  clue:'Wearing away of land by water or wind'},
+  {answer:'DELTA',    clue:'Landform where a river meets the sea'},
+  {answer:'TUNDRA',   clue:'Cold treeless biome near the poles'},
+  {answer:'MONSOON',  clue:'Seasonal wind pattern that brings heavy rain'},
+];
+let placedWords = JSON.parse(localStorage.getItem('geo-cw-placed') || '[]');
+let playerGrid  = JSON.parse(localStorage.getItem('geo-cw-player') || '{}');
+let gridData    = {}; // "r,c" -> {letter, num, words:[]}
+let activeWord  = null;
+let activeCell  = null;
+
+// ═══════════════════════════════════════════
+// EDITOR UI
+// ═══════════════════════════════════════════
+function renderWordRows() {
+  const c = document.getElementById('word-rows');
+  c.innerHTML = '';
+  wordList.forEach((w,i) => {
+    const row = document.createElement('div');
+    row.className = 'word-row';
+    row.innerHTML = `
+      <input class="ans" type="text" value="${w.answer}" placeholder="WORD"
+        maxlength="20"
+        oninput="wordList[${i}].answer=this.value.toUpperCase().replace(/[^A-Z]/g,'');this.value=wordList[${i}].answer">
+      <input type="text" value="${escHtml(w.clue)}" placeholder="Write the clue here…"
+        oninput="wordList[${i}].clue=this.value">
+      <button class="del-btn" onclick="removeWord(${i})" title="Remove">✕</button>`;
+    c.appendChild(row);
+  });
+}
+
+function escHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;'); }
+function addWordRow(){ wordList.push({answer:'',clue:''}); renderWordRows();
+  document.querySelectorAll('.word-row input')[wordList.length*2-2]?.focus(); }
+function removeWord(i){ wordList.splice(i,1); renderWordRows(); }
+
+function saveData(){
+  localStorage.setItem('geo-cw-words',  JSON.stringify(wordList));
+  localStorage.setItem('geo-cw-placed', JSON.stringify(placedWords));
+  showStatus('Saved!','success'); setTimeout(hideStatus,2000);
+}
+
+// ═══════════════════════════════════════════
+// LAYOUT ENGINE
+// ═══════════════════════════════════════════
+function buildCrossword(){
+  const words = wordList
+    .map(w=>({answer:w.answer.toUpperCase().replace(/[^A-Z]/g,''), clue:w.clue.trim()}))
+    .filter(w=>w.answer.length>=2 && w.clue);
+
+  if(words.length < 2){ showStatus('Need at least 2 words with clues to build a crossword.','error'); return; }
+
+  words.sort((a,b)=>b.answer.length-a.answer.length);
+
+  const result = autoLayout(words);
+  if(!result || result.length < 2){
+    showStatus('Could not connect the words — try adding words that share more letters in common.','error');
+    return;
+  }
+  placedWords = result;
+  playerGrid  = {};
+  saveData();
+  localStorage.setItem('geo-cw-player','{}');
+  renderPuzzle();
+  hideStatus();
+}
+
+function autoLayout(words){
+  const placed = [];
+
+  // First word horizontal at (0,0)
+  placed.push({answer:words[0].answer, clue:words[0].clue, dir:'across', row:0, col:0});
+
+  for(let wi=1; wi<words.length; wi++){
+    const word = words[wi];
+    let best=null, bestScore=-Infinity;
+
+    for(const pw of placed){
+      for(let pi=0; pi<pw.answer.length; pi++){
+        for(let wi2=0; wi2<word.answer.length; wi2++){
+          if(pw.answer[pi] !== word.answer[wi2]) continue;
+          const newDir = pw.dir==='across' ? 'down' : 'across';
+          const row = pw.dir==='across' ? pw.row - wi2 : pw.row + pi;
+          const col = pw.dir==='across' ? pw.col + pi  : pw.col - wi2;
+          const cand = {answer:word.answer, clue:word.clue, dir:newDir, row, col};
+          if(!hasConflict(cand, placed)){
+            const score = computeScore(cand, placed);
+            if(score > bestScore){ bestScore=score; best=cand; }
+          }
+        }
+      }
+    }
+    if(best) placed.push(best);
+  }
+  return placed;
+}
+
+function cellsOf(w){
+  return w.answer.split('').map((letter,i)=>({
+    letter,
+    row: w.dir==='across' ? w.row    : w.row+i,
+    col: w.dir==='across' ? w.col+i  : w.col,
+  }));
+}
+
+function hasConflict(cand, placed){
+  const existing = {};
+  for(const pw of placed)
+    for(const c of cellsOf(pw))
+      existing[`${c.row},${c.col}`] = c.letter;
+
+  // Letter conflict
+  for(const c of cellsOf(cand)){
+    const key=`${c.row},${c.col}`;
+    if(existing[key] && existing[key]!==c.letter) return true;
+  }
+
+  // Parallel adjacency check (two words same direction can't be side by side unless they share a crossing)
+  for(const pw of placed){
+    if(pw.dir !== cand.dir) continue;
+    if(cand.dir==='across'){
+      if(Math.abs(cand.row-pw.row)===1){
+        const cs=cand.col, ce=cand.col+cand.answer.length-1;
+        const ps=pw.col,   pe=pw.col+pw.answer.length-1;
+        if(cs<=pe && ps<=ce) return true;
+      }
+      // Same row full overlap
+      if(cand.row===pw.row){
+        for(const c of cellsOf(cand)) for(const p of cellsOf(pw))
+          if(c.row===p.row && c.col===p.col) return true;
+      }
+    } else {
+      if(Math.abs(cand.col-pw.col)===1){
+        const cs=cand.row, ce=cand.row+cand.answer.length-1;
+        const ps=pw.row,   pe=pw.row+pw.answer.length-1;
+        if(cs<=pe && ps<=ce) return true;
+      }
+      if(cand.col===pw.col){
+        for(const c of cellsOf(cand)) for(const p of cellsOf(pw))
+          if(c.row===p.row && c.col===p.col) return true;
+      }
+    }
+  }
+
+  // Head/tail blocking (cell immediately before/after word must be empty)
+  const tips = cand.dir==='across'
+    ? [{row:cand.row, col:cand.col-1},{row:cand.row, col:cand.col+cand.answer.length}]
+    : [{row:cand.row-1, col:cand.col},{row:cand.row+cand.answer.length, col:cand.col}];
+  for(const t of tips) if(existing[`${t.row},${t.col}`]) return true;
+
+  return false;
+}
+
+function computeScore(cand, placed){
+  let crossings=0;
+  const cc = new Set(cellsOf(cand).map(c=>`${c.row},${c.col}`));
+  for(const pw of placed)
+    for(const c of cellsOf(pw))
+      if(cc.has(`${c.row},${c.col}`)) crossings++;
+  return crossings*10;
+}
+
+// ═══════════════════════════════════════════
+// RENDER PUZZLE
+// ═══════════════════════════════════════════
+function renderPuzzle(){
+  if(!placedWords.length){
+    document.getElementById('puzzle-wrap').style.display='none';
+    document.getElementById('player-toolbar').style.display='none';
+    document.getElementById('empty-state').style.display='block';
+    return;
+  }
+  document.getElementById('empty-state').style.display='none';
+  document.getElementById('puzzle-wrap').style.display='grid';
+  document.getElementById('player-toolbar').style.display='flex';
+
+  // Build gridData
+  gridData={};
+  for(const w of placedWords)
+    for(const c of cellsOf(w)){
+      const key=`${c.row},${c.col}`;
+      if(!gridData[key]) gridData[key]={letter:c.letter,words:[]};
+      gridData[key].words.push(w);
+    }
+
+  // Normalize to 0-based
+  const rs=Object.keys(gridData).map(k=>+k.split(',')[0]);
+  const cs=Object.keys(gridData).map(k=>+k.split(',')[1]);
+  const minR=Math.min(...rs), minC=Math.min(...cs);
+  const maxR=Math.max(...rs), maxC=Math.max(...cs);
+
+  const norm={};
+  for(const [k,v] of Object.entries(gridData)){
+    const [r,c]=k.split(',').map(Number);
+    norm[`${r-minR},${c-minC}`]=v;
+  }
+  gridData=norm;
+  placedWords.forEach(w=>{w.row-=minR; w.col-=minC;});
+
+  numberCells();
+
+  const rows=maxR-minR+1, cols=maxC-minC+1;
+  const el=document.getElementById('cw-grid');
+  el.style.gridTemplateColumns=`repeat(${cols},var(--cell))`;
+  el.style.gridTemplateRows=`repeat(${rows},var(--cell))`;
+  el.innerHTML='';
+
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      const key=`${r},${c}`;
+      const cell=document.createElement('div');
+      cell.className='cell';
+      cell.dataset.key=key;
+
+      if(gridData[key]){
+        if(gridData[key].num){
+          const n=document.createElement('span');
+          n.className='cell-num';
+          n.textContent=gridData[key].num;
+          cell.appendChild(n);
+        }
+        const inp=document.createElement('input');
+        inp.type='text'; inp.maxLength=1; inp.autocomplete='off';
+        inp.value=playerGrid[key]||'';
+        inp.addEventListener('focus',()=>onFocus(key));
+        inp.addEventListener('keydown',e=>onKeydown(e,key));
+        inp.addEventListener('input',e=>onInput(e,key));
+        cell.appendChild(inp);
+        cell.addEventListener('click',()=>{
+          if(activeCell===key && gridData[key]?.words.length>1){
+            const other=gridData[key].words.find(w=>w!==activeWord?.word);
+            if(other){setActive(other,key); return;}
+          }
+          inp.focus();
+        });
+      } else {
+        cell.classList.add('black');
+      }
+      el.appendChild(cell);
+    }
+  }
+  renderClues();
+  updateHL();
+}
+
+function numberCells(){
+  const sorted=Object.keys(gridData).sort((a,b)=>{
+    const[r1,c1]=a.split(',').map(Number);
+    const[r2,c2]=b.split(',').map(Number);
+    return r1!==r2?r1-r2:c1-c2;
+  });
+  let n=1;
+  for(const key of sorted){
+    const[r,c]=key.split(',').map(Number);
+    const sa=startsWord(r,c,'across'), sd=startsWord(r,c,'down');
+    if(sa||sd){
+      gridData[key].num=n;
+      placedWords.forEach(w=>{ if(w.row===r&&w.col===c) w.num=n; });
+      n++;
+    }
+  }
+}
+
+function startsWord(r,c,dir){
+  if(!gridData[`${r},${c}`]) return false;
+  if(dir==='across'){
+    return !gridData[`${r},${c-1}`] && !!gridData[`${r},${c+1}`];
+  } else {
+    return !gridData[`${r-1},${c}`] && !!gridData[`${r+1},${c}`];
+  }
+}
+
+// ═══════════════════════════════════════════
+// CLUES
+// ═══════════════════════════════════════════
+function renderClues(){
+  const aEl=document.getElementById('across-clues');
+  const dEl=document.getElementById('down-clues');
+  aEl.innerHTML=''; dEl.innerHTML='';
+  const aw=placedWords.filter(w=>w.dir==='across'&&w.num).sort((a,b)=>a.num-b.num);
+  const dw=placedWords.filter(w=>w.dir==='down'  &&w.num).sort((a,b)=>a.num-b.num);
+  aw.forEach(w=>aEl.appendChild(clueEl(w)));
+  dw.forEach(w=>dEl.appendChild(clueEl(w)));
+}
+
+function clueEl(w){
+  const el=document.createElement('div');
+  el.className='clue-item';
+  el.dataset.idx=placedWords.indexOf(w);
+  el.innerHTML=`<span class="clue-num">${w.num}</span><span>${w.clue}</span>`;
+  el.addEventListener('click',()=>{
+    setActive(w,`${w.row},${w.col}`);
+    document.querySelector(`.cell[data-key="${w.row},${w.col}"] input`)?.focus();
+  });
+  return el;
+}
+
+// ═══════════════════════════════════════════
+// INTERACTION
+// ═══════════════════════════════════════════
+function onFocus(key){
+  if(!activeWord || !wordCoversCell(activeWord.word, key)){
+    const ws=gridData[key]?.words||[];
+    if(ws.length) setActive(ws[0],key);
+  }
+  activeCell=key;
+  updateHL();
+}
+
+function wordCoversCell(w,key){
+  return cellsOf(w).some(c=>`${c.row},${c.col}`===key);
+}
+
+function setActive(word, cellKey){
+  activeWord={word};
+  activeCell=cellKey;
+  updateHL();
+  document.querySelectorAll('.clue-item').forEach(el=>{
+    el.classList.toggle('active-clue', +el.dataset.idx===placedWords.indexOf(word));
+  });
+  document.querySelector('.clue-item.active-clue')?.scrollIntoView({block:'nearest',behavior:'smooth'});
+}
+
+function updateHL(){
+  document.querySelectorAll('.cell').forEach(c=>{
+    c.classList.remove('hl','active-cell');
+  });
+  if(!activeWord) return;
+  cellsOf(activeWord.word).forEach(c=>{
+    document.querySelector(`.cell[data-key="${c.row},${c.col}"]`)?.classList.add('hl');
+  });
+  if(activeCell)
+    document.querySelector(`.cell[data-key="${activeCell}"]`)?.classList.add('active-cell');
+}
+
+function onInput(e, key){
+  const inp=e.target;
+  const val=inp.value.replace(/[^a-zA-Z]/g,'').toUpperCase().slice(-1);
+  inp.value=val;
+  playerGrid[key]=val;
+  inp.closest('.cell')?.classList.remove('correct','wrong');
+  if(val) moveNext(key);
+  localStorage.setItem('geo-cw-player',JSON.stringify(playerGrid));
+}
+
+function onKeydown(e,key){
+  const[r,c]=key.split(',').map(Number);
+  if(e.key==='Backspace'){
+    const inp=e.target;
+    if(inp.value){ inp.value=''; playerGrid[key]=''; inp.closest('.cell')?.classList.remove('correct','wrong');
+      localStorage.setItem('geo-cw-player',JSON.stringify(playerGrid));
+    } else { movePrev(key); }
+    e.preventDefault(); return;
+  }
+  if(e.key==='Tab'){ e.preventDefault(); cycleWord(e.shiftKey); return; }
+  const arrows={'ArrowRight':[0,1],'ArrowLeft':[0,-1],'ArrowDown':[1,0],'ArrowUp':[-1,0]};
+  if(arrows[e.key]){
+    const[dr,dc]=arrows[e.key];
+    focusCell(r+dr,c+dc); e.preventDefault();
+  }
+}
+
+function moveNext(key){
+  if(!activeWord) return;
+  const cells=cellsOf(activeWord.word);
+  const i=cells.findIndex(c=>`${c.row},${c.col}`===key);
+  if(i<cells.length-1) focusCell(cells[i+1].row, cells[i+1].col);
+}
+function movePrev(key){
+  if(!activeWord) return;
+  const cells=cellsOf(activeWord.word);
+  const i=cells.findIndex(c=>`${c.row},${c.col}`===key);
+  if(i>0) focusCell(cells[i-1].row, cells[i-1].col);
+}
+function focusCell(r,c){
+  document.querySelector(`.cell[data-key="${r},${c}"] input`)?.focus();
+}
+function cycleWord(back){
+  const sorted=[...placedWords].filter(w=>w.num).sort((a,b)=>{
+    if(a.dir!==b.dir) return a.dir==='across'?-1:1;
+    return a.num-b.num;
+  });
+  const cur=activeWord?sorted.findIndex(w=>w===activeWord.word):-1;
+  const next=((back?cur-1:cur+1)+sorted.length)%sorted.length;
+  const w=sorted[next];
+  if(w){ setActive(w,`${w.row},${w.col}`); focusCell(w.row,w.col); }
+}
+
+// ═══════════════════════════════════════════
+// CHECK / REVEAL / CLEAR
+// ═══════════════════════════════════════════
+function checkAnswers(){
+  let correct=0, filled=0, total=Object.keys(gridData).length;
+  document.querySelectorAll('.cell:not(.black)').forEach(cell=>{
+    const key=cell.dataset.key;
+    const inp=cell.querySelector('input');
+    if(!inp||!inp.value) return;
+    filled++;
+    if(inp.value===gridData[key]?.letter){ cell.classList.add('correct'); cell.classList.remove('wrong'); correct++; }
+    else { cell.classList.add('wrong'); cell.classList.remove('correct'); }
+  });
+  document.getElementById('score-display').textContent=`${correct} correct · ${filled}/${total} filled`;
+}
+function revealAll(){
+  document.querySelectorAll('.cell:not(.black)').forEach(cell=>{
+    const key=cell.dataset.key;
+    const inp=cell.querySelector('input');
+    if(!inp) return;
+    inp.value=gridData[key]?.letter||'';
+    playerGrid[key]=inp.value;
+    cell.classList.add('correct'); cell.classList.remove('wrong');
+  });
+  localStorage.setItem('geo-cw-player',JSON.stringify(playerGrid));
+}
+function clearAnswers(){
+  document.querySelectorAll('.cell:not(.black)').forEach(cell=>{
+    const inp=cell.querySelector('input');
+    if(inp) inp.value='';
+    cell.classList.remove('correct','wrong');
+  });
+  playerGrid={}; localStorage.setItem('geo-cw-player','{}');
+  document.getElementById('score-display').textContent='';
+}
+
+// ═══════════════════════════════════════════
+// STATUS
+// ═══════════════════════════════════════════
+function showStatus(msg,type){ const el=document.getElementById('status'); el.textContent=msg; el.className=`status-bar ${type}`; }
+function hideStatus(){ document.getElementById('status').className='status-bar'; }
+
+// ═══════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════
+// Called whenever lock state changes or on first load
+function applyEditMode() {
+  const on = document.body.dataset.editMode === 'on';
+  document.querySelectorAll('.edit-only').forEach(el => el.style.display = on ? '' : 'none');
+  const hint = document.getElementById('empty-hint');
+  if (hint) hint.textContent = on ? 'Add words above and click Generate.' : 'Log in as editor to create one.';
+  if (on) renderWordRows();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Watch for login/logout after page load
+  new MutationObserver(applyEditMode)
+    .observe(document.body, {attributes: true, attributeFilter: ['data-edit-mode']});
+
+  // Run now (auth.js loaded before this script, no defer, so attribute is already set)
+  applyEditMode();
+  // Belt-and-suspenders: catch any remaining race
+  setTimeout(applyEditMode, 150);
+
+  if (placedWords.length) {
+    renderPuzzle();
+  } else {
+    document.getElementById('empty-state').style.display = 'block';
+  }
+});
+</script>
+</body>
+</html>
