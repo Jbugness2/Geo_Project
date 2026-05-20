@@ -64,38 +64,78 @@
 
 <script>
 const mapDefs = [
-  { title: 'Physical / Topographic Map', caption: 'Describe what this map shows — landforms, elevation, terrain features. Explain how the physical landscape influences life in the region.' },
-  { title: 'Political / Regional Map', caption: 'Identify country borders, major cities, capitals. Note any significant geopolitical relationships or contested areas.' },
-  { title: 'Climate / Biome Map', caption: 'Label climate zones or biomes visible on this map. Explain how climate affects agriculture, settlement, and daily life.' },
-  { title: 'Population / Human Activity Map', caption: 'Describe settlement patterns, population density, or economic activity. Connect human distribution to the physical environment.' },
+  {
+    title: 'Physical / Topographic Map',
+    imageUrl: 'PASTE_IMAGE_URL_HERE',
+    caption: 'Describe what this map shows — landforms, elevation, terrain features.'
+  },
+  {
+    title: 'Political / Regional Map',
+    imageUrl: 'PASTE_IMAGE_URL_HERE',
+    caption: 'Identify country borders, major cities, and capitals.'
+  },
+  {
+    title: 'Climate / Biome Map',
+    imageUrl: 'PASTE_IMAGE_URL_HERE',
+    caption: 'Label climate zones or biomes visible on this map.'
+  },
+  {
+    title: 'Population / Human Activity Map',
+    imageUrl: 'PASTE_IMAGE_URL_HERE',
+    caption: 'Describe settlement patterns or economic activity.'
+  },
 ];
 
 let images = JSON.parse(localStorage.getItem('geo-maps-images') || '{}');
 let captions = JSON.parse(localStorage.getItem('geo-maps-captions') || '{}');
 let titles = JSON.parse(localStorage.getItem('geo-maps-titles') || '{}');
 
-function render() {
+  function render() {
   const grid = document.getElementById('maps-grid');
   grid.innerHTML = '';
+
   mapDefs.forEach((m, i) => {
-    const imgSrc = images[i] || '';
+    const imgSrc = m.imageUrl || '';
     const cap = captions[i] !== undefined ? captions[i] : m.caption;
     const title = titles[i] !== undefined ? titles[i] : m.title;
+
     grid.innerHTML += `
     <div class="map-slot">
       <div class="map-slot-header">
         <span>🗺️</span>
-        <input type="text" value="${title}" placeholder="Map Title" onchange="titles[${i}]=this.value;save()">
+        <input type="text"
+          value="${title}"
+          placeholder="Map Title"
+          onchange="titles[${i}] = this.value; save()">
       </div>
-      <div class="map-area" id="area-${i}">
-        ${imgSrc
-          ? `<img src="${imgSrc}" alt="Map ${i+1}"><button onclick="clearImg(${i})" class="clear-btn" style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.85);border:none;border-radius:3px;padding:3px 8px;cursor:pointer;font-size:0.78rem;color:#c0392b;">✕ Remove</button>`
-          : `<div class="placeholder-text"><span class="icon">🖼️</span><p>Click to upload a map image<br><span style="color:#ccc;font-size:0.78rem">(JPG, PNG, GIF)</span></p></div><input type="file" accept="image/*" onchange="loadImg(event,${i})">`
+
+      <div class="map-area">
+
+        ${
+          imgSrc && imgSrc !== 'PASTE_IMAGE_URL_HERE'
+          ? `<img src="${imgSrc}" alt="Map ${i+1}">`
+          : `
+          <div class="placeholder-text">
+            <span class="icon">🌐</span>
+            <p>
+              Paste an image URL inside the code<br>
+              <span style="color:#ccc;font-size:0.78rem">
+                imageUrl: 'YOUR_LINK_HERE'
+              </span>
+            </p>
+          </div>
+          `
         }
+
       </div>
+
       <div class="map-caption">
-        <textarea placeholder="Write your map caption and analysis here..." onchange="captions[${i}]=this.value;save()">${cap}</textarea>
+        <textarea
+          placeholder="Write your map caption and analysis here..."
+          onchange="captions[${i}] = this.value; save()"
+        >${cap}</textarea>
       </div>
+
     </div>`;
   });
 }
