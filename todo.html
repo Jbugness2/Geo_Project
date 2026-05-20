@@ -155,32 +155,39 @@ let data = JSON.parse(localStorage.getItem('geo-todo') || 'null') || {
   title: "Field Researcher's Action List: [Your Region]",
   sub:   "Steps for understanding physical and human systems",
   cats: [
-    { name:"📍 Physical Geography", items:[
-      {text:"Research the main landforms and topography of the region", done:false, tag:"Research"},
-      {text:"Identify the climate zone and seasonal patterns",          done:false, tag:"Research"},
-      {text:"Map major rivers, lakes, and water systems",              done:false, tag:"Mapping"},
-      {text:"Document natural resources and biomes",                   done:false, tag:"Notes"},
-    ]},
-    { name:"👥 Human Geography", items:[
-      {text:"Gather population and demographic data",                  done:false, tag:"Data"},
-      {text:"Investigate cultural practices, languages, and religions",done:false, tag:"Research"},
-      {text:"Analyze the region's economy and major industries",       done:false, tag:"Analysis"},
-      {text:"Study how people have adapted to the physical environment",done:false,tag:"Analysis"},
-    ]},
-    { name:"⚠️ Environmental & Political", items:[
-      {text:"Identify 3 major environmental challenges in the region", done:false, tag:"Issues"},
-      {text:"Research government policies on land use or resources",    done:false, tag:"Policy"},
-      {text:"Note any ongoing conflicts tied to geographic factors",    done:false, tag:"Notes"},
-    ]},
-    { name:"✏️ Project Tasks", items:[
-      {text:"Complete research report draft",                          done:false, tag:"Writing"},
-      {text:"Finish pamphlet design and content",                      done:false, tag:"Design"},
-      {text:"Fill in crossword clues with vocab from the region",      done:false, tag:"Puzzle"},
-      {text:"Finalize quiz questions and answer key",                  done:false, tag:"Quiz"},
-      {text:"Insert maps and label geographic features",               done:false, tag:"Maps"},
-    ]},
-  ]
-};
+    cats: [
+      { name:"💵 Low Class", items:[
+        {text:"Wake up early for work or school responsibilities",          done:false, tag:"Morning"},
+        {text:"Use public transportation or walk to daily destinations",    done:false, tag:"Travel"},
+        {text:"Work long shifts or multiple jobs during the day",           done:false, tag:"Work"},
+        {text:"Shop for affordable groceries and basic necessities",        done:false, tag:"Shopping"},
+        {text:"Spend evenings with family or resting at home",              done:false, tag:"Home"},
+      ]},
+    
+      { name:"🏠 Middle Class", items:[
+        {text:"Prepare for work or school in the morning",                  done:false, tag:"Morning"},
+        {text:"Commute by personal vehicle or public transportation",       done:false, tag:"Travel"},
+        {text:"Work regular business hours or attend classes",              done:false, tag:"Work"},
+        {text:"Participate in hobbies, sports, or social activities",       done:false, tag:"Lifestyle"},
+        {text:"Spend time with family, entertainment, or dining out",       done:false, tag:"Evening"},
+      ]},
+    
+      { name:"💎 High Class", items:[
+        {text:"Begin the day with luxury routines or personal services",    done:false, tag:"Luxury"},
+        {text:"Travel using private vehicles or premium transportation",    done:false, tag:"Travel"},
+        {text:"Manage businesses, investments, or high-level meetings",     done:false, tag:"Work"},
+        {text:"Attend exclusive events, restaurants, or vacations",         done:false, tag:"Lifestyle"},
+        {text:"Spend free time on recreation, networking, or leisure",      done:false, tag:"Leisure"},
+      ]},
+    
+      { name:"🧳 Tourist", items:[
+        {text:"Visit famous landmarks and attractions",                     done:false, tag:"Sightseeing"},
+        {text:"Take photos and explore local culture",                      done:false, tag:"Culture"},
+        {text:"Try regional foods and restaurants",                         done:false, tag:"Food"},
+        {text:"Shop for souvenirs and local products",                      done:false, tag:"Shopping"},
+        {text:"Stay in hotels and plan the next destination",               done:false, tag:"Travel"},
+      ]},
+    ]
 
 // ── Header ────────────────────────────────────────────────────────────────────
 function updateHeader() {
