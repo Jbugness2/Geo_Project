@@ -1,586 +1,336 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discover Japan</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Dancing+Script:wght@700&family=Raleway:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-<style>
-* { margin:0; padding:0; box-sizing:border-box; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Japan's Economy Report</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=DM+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ink: #0f0e0d;
+      --paper: #f5f0e8;
+      --red: #c0392b;
+      --gold: #b8942a;
+      --muted: #7a736a;
+      --rule: #d4cec4;
+    }
 
-:root {
-  --red: #c0392b;
-  --navy: #1b2a4a;
-  --cream: #faf5ee;
-  --blush: #f7ede8;
-  --gold: #c9a84c;
-  --text: #2c2c2c;
-  --light-text: #555;
-}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-body {
-  font-family: 'Raleway', sans-serif;
-  background: #d6cfc6;
-  min-height: 100vh;
-  padding: 2rem;
-}
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+    }
 
-.page-wrap {
-  max-width: 1180px;
-  margin: 0 auto;
-}
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      padding: 80px 60px 60px;
+      border-bottom: 1px solid var(--rule);
+      overflow: hidden;
+    }
 
-/* HOME BAR */
-.home-bar {
-  margin-bottom: 1rem;
-}
-.home-bar a {
-  display: inline-block;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--navy);
-  text-decoration: none;
-  padding: 0.45rem 1.1rem;
-  border: 2px solid var(--navy);
-  border-radius: 3px;
-  background: rgba(255,255,255,0.5);
-  transition: background 0.2s, color 0.2s;
-}
-.home-bar a:hover { background: var(--navy); color: #fff; }
+    .hero::before {
+      content: '日本経済';
+      position: absolute;
+      right: -20px;
+      top: 10px;
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(80px, 14vw, 160px);
+      font-weight: 700;
+      color: rgba(192, 57, 43, 0.06);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
 
-/* BROCHURE: 3 equal columns with visible dividers */
-.brochure {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  width: 100%;
-  box-shadow: 0 16px 50px rgba(0,0,0,0.4);
-  border-radius: 4px;
-  overflow: hidden;
-  /* Dividers between panels */
-  gap: 0;
-  border: 3px solid #888;
-}
+    .hero-eyebrow {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 20px;
+    }
 
-/* ════════════════════════════
-   PANEL 1 — LEFT (dark hero)
-════════════════════════════ */
-.panel-left {
-  background: linear-gradient(170deg, #141e36 0%, #2b1530 50%, #7a1515 100%);
-  padding: 2rem 1.6rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  border-right: 3px solid #888;
-  min-height: 820px;
-}
+    .hero h1 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(36px, 6vw, 72px);
+      font-weight: 300;
+      line-height: 1.1;
+      max-width: 700px;
+    }
 
-/* floating sakura — purely decorative, won't affect flow */
-.sakura-layer {
-  position: relative;
-  pointer-events: none;
-  height: 0;        /* zero height so it doesn't push content */
-  overflow: visible;
-}
-.sakura-layer span {
-  position: absolute;
-  font-size: 1rem;
-  opacity: 0.3;
-  animation: sway 6s ease-in-out infinite;
-}
-.sakura-layer span:nth-child(1) { top: -180px; left: -5px;  animation-delay: 0s; }
-.sakura-layer span:nth-child(2) { top: -160px; right: -5px; animation-delay: 1.8s; }
-.sakura-layer span:nth-child(3) { top: -80px;  right: 10px; animation-delay: 3.2s; font-size: 0.8rem; }
-@keyframes sway {
-  0%,100% { transform: translateY(0) rotate(0deg); }
-  50%      { transform: translateY(-10px) rotate(12deg); }
-}
+    .hero h1 em {
+      font-style: normal;
+      font-weight: 700;
+      color: var(--red);
+    }
 
-.hero-eyebrow {
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 0.5rem;
-}
-.hero-discover {
-  font-family: 'Dancing Script', cursive;
-  font-size: 2.6rem;
-  color: #fff;
-  line-height: 1.05;
-}
-.hero-japan {
-  font-family: 'Raleway', sans-serif;
-  font-weight: 800;
-  font-size: 4.2rem;
-  line-height: 0.9;
-  color: var(--red);
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-}
-.hero-taglines {
-  margin-top: 0.8rem;
-}
-.hero-taglines p {
-  font-size: 0.7rem;
-  font-weight: 300;
-  color: rgba(255,255,255,0.72);
-  font-style: italic;
-  line-height: 2;
-  letter-spacing: 0.04em;
-}
+    .hero-meta {
+      margin-top: 32px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
 
-/* red circle quote */
-.quote-circle {
-  width: 148px;
-  height: 148px;
-  border-radius: 50%;
-  background: var(--red);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 1.1rem;
-  margin: 1.6rem auto 1.4rem;
-  flex-shrink: 0;
-}
-.quote-circle p {
-  font-family: 'Playfair Display', serif;
-  font-style: italic;
-  font-size: 0.67rem;
-  color: #fff;
-  line-height: 1.6;
-}
+    .hero-meta span { display: flex; align-items: center; gap: 6px; }
+    .hero-meta .dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--rule);
+    }
 
-/* photo thumbnails */
-.thumb-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
-  margin-top: auto;
-}
-.thumb {
-  height: 85px;
-  border-radius: 4px;
-  border: 2px solid rgba(255,255,255,0.18);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-}
-.thumb.bamboo { background: linear-gradient(135deg,#1b4425,#2d7a38); }
-.thumb.castle { background: linear-gradient(135deg,#1a2a50,#2a4a80); }
+    /* ── LAYOUT ── */
+    .report-body {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 60px 100px;
+    }
 
-.hero-bottom {
-  margin-top: 1rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid rgba(255,255,255,0.12);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.hero-bottom span {
-  font-size: 0.67rem;
-  color: rgba(255,255,255,0.55);
-  font-style: italic;
-}
+    /* ── SECTIONS ── */
+    .section {
+      padding: 60px 0;
+      border-bottom: 1px solid var(--rule);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.6s ease forwards;
+    }
 
-/* ════════════════════════════
-   PANEL 2 — MIDDLE (cream)
-════════════════════════════ */
-.panel-mid {
-  background: var(--cream);
-  padding: 1.8rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  border-right: 3px solid #aaa;
-}
+    .section:nth-child(1) { animation-delay: 0.1s; }
+    .section:nth-child(2) { animation-delay: 0.2s; }
+    .section:nth-child(3) { animation-delay: 0.3s; }
+    .section:nth-child(4) { animation-delay: 0.4s; }
+    .section:nth-child(5) { animation-delay: 0.5s; }
 
-.why-header {
-  background: var(--navy);
-  text-align: center;
-  padding: 0.6rem 1rem;
-  border-radius: 3px;
-  margin-bottom: 1.4rem;
-  position: relative;
-}
-.why-header::before { content: '🌸'; position: absolute; left: 0.7rem; top: 50%; transform: translateY(-50%); font-size: 0.9rem; }
-.why-header::after  { content: '🌸'; position: absolute; right: 0.7rem; top: 50%; transform: translateY(-50%); font-size: 0.9rem; }
-.why-header h2 {
-  font-weight: 800;
-  font-size: 0.85rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: #fff;
-}
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-.reason {
-  display: flex;
-  gap: 0.8rem;
-  margin-bottom: 1rem;
-  align-items: flex-start;
-}
-.r-icon {
-  width: 40px; height: 40px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1rem;
-  flex-shrink: 0;
-}
-.r-icon.red   { background: var(--red); }
-.r-icon.navy  { background: var(--navy); }
-.r-body h3 {
-  font-size: 0.74rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text);
-  margin-bottom: 0.2rem;
-}
-.r-body p {
-  font-size: 0.69rem;
-  line-height: 1.65;
-  color: var(--light-text);
-}
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+      margin-bottom: 32px;
+    }
 
-/* seasons box at bottom */
-.seasons-box {
-  margin-top: auto;
-  background: var(--blush);
-  border: 1px solid rgba(192,57,43,0.18);
-  border-radius: 6px;
-  padding: 0.9rem 1rem;
-}
-.seasons-label {
-  text-align: center;
-  font-size: 0.67rem;
-  font-weight: 800;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 0.75rem;
-}
-.seasons-grid {
-  display: grid;
-  grid-template-columns: repeat(4,1fr);
-  gap: 0.3rem;
-  text-align: center;
-}
-.s-col .s-ico { font-size: 1.2rem; display: block; }
-.s-col h4 {
-  font-size: 0.62rem; font-weight: 800;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--navy); margin: 0.15rem 0 0.1rem;
-}
-.s-col .s-date { font-size: 0.58rem; color: var(--light-text); display: block; margin-bottom: 0.2rem; }
-.s-col p { font-size: 0.58rem; color: var(--light-text); line-height: 1.4; }
-.seasons-note {
-  text-align: center;
-  font-size: 0.62rem;
-  font-style: italic;
-  color: var(--light-text);
-  margin-top: 0.65rem;
-  padding-top: 0.5rem;
-  border-top: 1px solid rgba(0,0,0,0.07);
-}
+    .section-number {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--red);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      padding-top: 4px;
+    }
 
-/* ════════════════════════════
-   PANEL 3 — RIGHT (blush bg to differ from middle)
-════════════════════════════ */
-.panel-right {
-  background: #f0ebe2;   /* slightly warmer/darker than cream — clearly different */
-  display: flex;
-  flex-direction: column;
-}
+    .section h2 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(22px, 3.5vw, 34px);
+      font-weight: 300;
+      line-height: 1.2;
+      color: var(--ink);
+    }
 
-.exp-top {
-  padding: 1.5rem 1.5rem 0.8rem;
-}
-.exp-spark {
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--red);
-}
-.exp-spark::before { content: '✦ '; }
-.exp-h {
-  font-family: 'Dancing Script', cursive;
-  font-size: 2.5rem;
-  color: var(--red);
-  line-height: 1;
-}
-.exp-sub {
-  font-weight: 800;
-  font-size: 1.15rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--navy);
-}
+    .section h2 strong {
+      font-weight: 700;
+    }
 
-/* 2×2 image+caption grid */
-.exp-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  flex: 1;
-}
-.exp-cell {
-  display: flex;
-  flex-direction: column;
-  border: 1px solid rgba(0,0,0,0.1);
-}
-.exp-img {
-  height: 105px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 2.4rem;
-}
-.exp-img.shrine { background: linear-gradient(135deg,#b8cfe0,#7a9fb0); }
-.exp-img.city   { background: linear-gradient(135deg,#e8c090,#c8602a); }
-.exp-img.food   { background: linear-gradient(135deg,#f0d8b8,#d89050); }
-.exp-img.onsen  { background: linear-gradient(135deg,#b8cce8,#6080b8); }
-.exp-cap {
-  padding: 0.55rem 0.75rem 0.7rem;
-  flex: 1;
-}
-.exp-cap h4 {
-  font-size: 0.67rem;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 0.2rem;
-}
-.exp-cap p { font-size: 0.64rem; color: var(--light-text); line-height: 1.5; }
+    /* ── CONTENT PLACEHOLDER ── */
+    .content-area {
+      padding: 36px 40px;
+      background: rgba(255,255,255,0.5);
+      border-left: 3px solid var(--rule);
+      border-radius: 0 4px 4px 0;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+    }
 
-/* dark footer */
-.exp-footer {
-  background: var(--navy);
-  padding: 1.1rem 1.4rem 1rem;
-  text-align: center;
-}
-.exp-footer h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: 0.06em;
-  line-height: 1.55;
-}
-.exp-footer .script {
-  font-family: 'Dancing Script', cursive;
-  font-size: 1.55rem;
-  color: var(--red);
-  display: block;
-  margin-top: 0.1rem;
-}
-.icons-row {
-  display: flex;
-  justify-content: center;
-  gap: 1.1rem;
-  margin-top: 0.9rem;
-}
-.icon-pill { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
-.icon-circle {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: var(--red);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.75rem;
-}
-.icon-pill span {
-  font-size: 0.56rem;
-  color: rgba(255,255,255,0.7);
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-align: center;
-  max-width: 58px;
-  line-height: 1.3;
-}
-</style>
+    .placeholder-line {
+      height: 12px;
+      background: var(--rule);
+      border-radius: 6px;
+      opacity: 0.6;
+    }
+
+    .placeholder-line:nth-child(1) { width: 92%; }
+    .placeholder-line:nth-child(2) { width: 85%; }
+    .placeholder-line:nth-child(3) { width: 78%; }
+    .placeholder-line:nth-child(4) { width: 60%; }
+
+    .placeholder-label {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    /* ── REFERENCES ── */
+    .references-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .ref-slot {
+      padding: 16px 20px;
+      background: rgba(255,255,255,0.4);
+      border: 1px dashed var(--rule);
+      border-radius: 4px;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+    }
+
+    .ref-slot-label {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--rule);
+      font-weight: 600;
+    }
+
+    /* ── FOOTER ── */
+    .report-footer {
+      text-align: center;
+      padding: 40px 60px;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      border-top: 1px solid var(--rule);
+    }
+
+    .report-footer .jp {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 18px;
+      color: var(--rule);
+      display: block;
+      margin-top: 12px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .hero { padding: 50px 24px 40px; }
+      .report-body { padding: 0 24px 80px; }
+      .references-grid { grid-template-columns: 1fr; }
+      .report-footer { padding: 30px 24px; }
+    }
+  </style>
 </head>
 <body>
-<div class="page-wrap">
 
-  <div class="home-bar">
-    <a href="index.html">← Home</a>
-  </div>
+  <!-- HERO -->
+  <header class="hero">
+    <p class="hero-eyebrow">Economic Report &nbsp;·&nbsp; May 2026</p>
+    <h1>Japan's<br/><em>Economy</em><br/>History, Present &amp; Outlook</h1>
+    <div class="hero-meta">
+      <span>4 Sections</span>
+      <span class="dot"></span>
+      <span>Short Report</span>
+      <span class="dot"></span>
+      <span>Academic Level</span>
+    </div>
+  </header>
 
-  <div class="brochure">
+  <!-- BODY -->
+  <main class="report-body">
 
-    <!-- ══ LEFT PANEL ══ -->
-    <div class="panel-left">
-
-      <!-- decorative sakura that don't affect layout -->
-      <div class="sakura-layer">
-        <span>🌸</span><span>🌸</span><span>🌸</span>
+    <!-- Section 1 -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">01</span>
+        <h2><strong>Historical</strong> Background</h2>
       </div>
-
-      <div class="hero-eyebrow">✈ Your Adventure Starts Here</div>
-      <div class="hero-discover">Discover</div>
-      <div class="hero-japan">Japan</div>
-
-      <div class="hero-taglines">
-        <p>Timeless Culture.</p>
-        <p>Breathtaking Beauty.</p>
-        <p>Unforgettable Experiences.</p>
+      <div class="content-area">
+        <p class="placeholder-label">Content goes here</p>
+        <div class="placeholder-line">Hello</div>
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
       </div>
+    </section>
 
-      <div class="quote-circle">
-        <p>Japan is where tradition meets innovation, and every moment becomes a memory.</p>
+    <!-- Section 2 -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">02</span>
+        <h2>The <strong>Lost Decades</strong> (1990–2020s)</h2>
       </div>
-
-      <div class="thumb-row">
-        <div class="thumb bamboo">🎋</div>
-        <div class="thumb castle">🏯</div>
+      <div class="content-area">
+        <p class="placeholder-label">Content goes here</p>
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
       </div>
+    </section>
 
-      <div class="hero-bottom">
-        <span>🌐</span>
-        <span>Your adventure in Japan starts here!</span>
+    <!-- Section 3 -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">03</span>
+        <h2>The Economy <strong>Today</strong> (2026)</h2>
       </div>
-
-    </div><!-- end left -->
-
-    <!-- ══ MIDDLE PANEL ══ -->
-    <div class="panel-mid">
-
-      <div class="why-header"><h2>Why Visit Japan?</h2></div>
-
-      <div class="reason">
-        <div class="r-icon red">⛩️</div>
-        <div class="r-body">
-          <h3>Rich Culture &amp; History</h3>
-          <p>From ancient temples and shrines to historic castles and traditional tea ceremonies, Japan's heritage is truly captivating.</p>
-        </div>
+      <div class="content-area">
+        <p class="placeholder-label">Content goes here</p>
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
       </div>
+    </section>
 
-      <div class="reason">
-        <div class="r-icon navy">🗻</div>
-        <div class="r-body">
-          <h3>Stunning Scenery</h3>
-          <p>Experience breathtaking landscapes from majestic mountains and serene gardens to tropical beaches and vibrant cityscapes.</p>
-        </div>
+    <!-- Section 4 -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">04</span>
+        <h2>Outlook &amp; <strong>Key Risks</strong></h2>
       </div>
-
-      <div class="reason">
-        <div class="r-icon red">🍜</div>
-        <div class="r-body">
-          <h3>Incredible Food</h3>
-          <p>Savor world-famous cuisine like sushi, ramen, tempura, and more. Every region offers its own unique flavors!</p>
-        </div>
+      <div class="content-area">
+        <p class="placeholder-label">Content goes here</p>
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
       </div>
+    </section>
 
-      <div class="reason">
-        <div class="r-icon navy">🚄</div>
-        <div class="r-body">
-          <h3>Modern &amp; Convenient</h3>
-          <p>Enjoy top-notch hospitality, safe cities, and an efficient transportation system that makes travel easy and enjoyable.</p>
-        </div>
+    <!-- References -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">—</span>
+        <h2>References</h2>
       </div>
-
-      <div class="reason">
-        <div class="r-icon red">🛍️</div>
-        <div class="r-body">
-          <h3>Unique Shopping</h3>
-          <p>From high-tech gadgets and trendy fashion to traditional crafts and souvenirs — treasures you won't find anywhere else.</p>
-        </div>
+      <div class="references-grid">
+        <div class="ref-slot"><span class="ref-slot-label">Source 1</span></div>
+        <div class="ref-slot"><span class="ref-slot-label">Source 2</span></div>
+        <div class="ref-slot"><span class="ref-slot-label">Source 3</span></div>
+        <div class="ref-slot"><span class="ref-slot-label">Source 4</span></div>
+        <div class="ref-slot"><span class="ref-slot-label">Source 5</span></div>
+        <div class="ref-slot"><span class="ref-slot-label">Source 6</span></div>
       </div>
+    </section>
 
-      <div class="seasons-box">
-        <div class="seasons-label">🌸 Best Time to Visit 🌸</div>
-        <div class="seasons-grid">
-          <div class="s-col">
-            <span class="s-ico">🌸</span>
-            <h4>Spring</h4>
-            <span class="s-date">Mar – May</span>
-            <p>Cherry blossoms in full bloom</p>
-          </div>
-          <div class="s-col">
-            <span class="s-ico">🌿</span>
-            <h4>Summer</h4>
-            <span class="s-date">Jun – Aug</span>
-            <p>Festivals, fireworks &amp; vibrant nature</p>
-          </div>
-          <div class="s-col">
-            <span class="s-ico">🍂</span>
-            <h4>Autumn</h4>
-            <span class="s-date">Sep – Nov</span>
-            <p>Stunning fall colors &amp; mild weather</p>
-          </div>
-          <div class="s-col">
-            <span class="s-ico">❄️</span>
-            <h4>Winter</h4>
-            <span class="s-date">Dec – Feb</span>
-            <p>Snowy wonderlands &amp; hot springs</p>
-          </div>
-        </div>
-        <div class="seasons-note">No matter the season, Japan has something beautiful to offer you! ❤️</div>
-      </div>
+  </main>
 
-    </div><!-- end middle -->
+  <footer class="report-footer">
+    Japan Economy Report &nbsp;·&nbsp; May 2026
+    <span class="jp">日本経済</span>
+  </footer>
 
-    <!-- ══ RIGHT PANEL ══ -->
-    <div class="panel-right">
-
-      <div class="exp-top">
-        <div class="exp-spark">Experience</div>
-        <div class="exp-h">Japan</div>
-        <div class="exp-sub">Your Way</div>
-      </div>
-
-      <div class="exp-grid">
-        <div class="exp-cell">
-          <div class="exp-img shrine">⛩️</div>
-          <div class="exp-cap">
-            <h4>Explore</h4>
-            <p>Visit iconic landmarks, peaceful shrines, and UNESCO World Heritage Sites.</p>
-          </div>
-        </div>
-        <div class="exp-cell">
-          <div class="exp-img city">🏮</div>
-          <div class="exp-cap">
-            <h4>Experience</h4>
-            <p>Dive into local culture, exciting nightlife, and friendly traditions.</p>
-          </div>
-        </div>
-        <div class="exp-cell">
-          <div class="exp-img food">🍱</div>
-          <div class="exp-cap">
-            <h4>Taste</h4>
-            <p>Delight in authentic dishes made with fresh, seasonal ingredients.</p>
-          </div>
-        </div>
-        <div class="exp-cell">
-          <div class="exp-img onsen">♨️</div>
-          <div class="exp-cap">
-            <h4>Relax</h4>
-            <p>Unwind in natural hot springs, beautiful gardens, and tranquil spaces.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="exp-footer">
-        <h3>COME FOR THE SIGHTS,<br>STAY FOR THE MEMORIES.</h3>
-        <span class="script">Japan Awaits You!</span>
-        <div class="icons-row">
-          <div class="icon-pill">
-            <div class="icon-circle">✈️</div>
-            <span>Easy to Reach</span>
-          </div>
-          <div class="icon-pill">
-            <div class="icon-circle">🛡️</div>
-            <span>Safe &amp; Clean</span>
-          </div>
-          <div class="icon-pill">
-            <div class="icon-circle">❤️</div>
-            <span>Welcoming People</span>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- end right -->
-
-  </div><!-- end brochure -->
-</div>
 </body>
 </html>
