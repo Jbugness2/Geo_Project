@@ -52,7 +52,7 @@
   .cat-header { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
   .cat-name-display { font-size:0.72rem; text-transform:uppercase; letter-spacing:0.14em; font-weight:700; color:var(--clay); flex:1; }
   /* In edit mode, cat name becomes an input */
-  .cat-name-input { flex:1; border:1.5px dashed #ccc; border-radius:3px; padding:4px 8px; font-size:0.72rem; font-family:'DM Sans',sans-serif; color:var(--clay); font-weight:700; text-transform:uppercase; letter-spacing:0.1em; background:transparent; display:none; }
+  .cat-name-input { flex:1; border:1.5px dashed #ccc; border-radius:3px; padding:4px 8px; font-size:0.72rem; font-family:'DM Sans',sans-serif; color:var(--clay); font-weight:700; text-transform:uppercase; }
   .cat-name-input:focus { outline:none; border-color:var(--clay); background:white; }
   .cat-remove-btn { background:none; border:none; color:#ccc; cursor:pointer; font-size:0.82rem; display:none; }
   .cat-remove-btn:hover { color:#c0392b; }
@@ -150,12 +150,12 @@
 
 <script src="auth.js"></script>
 <script>
-// ── Data ──────────────────────────────────────────────────────────────────────
-let data = JSON.parse(localStorage.getItem('geo-todo') || 'null') || {
+// ── Default Data ─────────────────────────────────────────────────────────
+const defaultData = {
   title: "Field Researcher's Action List: [Your Region]",
   sub:   "Steps for understanding physical and human systems",
   cats: [
-      { name:"💵 Low Class", items:[
+    { name:"💵 Low Class", items:[
         {text:"Wake up early for work or school responsibilities",          done:false, tag:"Morning"},
         {text:"Use public transportation or walk to daily destinations",    done:false, tag:"Travel"},
         {text:"Work long shifts or multiple jobs during the day",           done:false, tag:"Work"},
@@ -186,9 +186,17 @@ let data = JSON.parse(localStorage.getItem('geo-todo') || 'null') || {
         {text:"Shop for souvenirs and local products",                      done:false, tag:"Shopping"},
         {text:"Stay in hotels and plan the next destination",               done:false, tag:"Travel"},
       ]},
-    ]
+  ]
+};
 
-// ── Header ────────────────────────────────────────────────────────────────────
+// ── Data ─────────────────────────────────────────────────────────────
+let data = JSON.parse(localStorage.getItem('geo-todo') || 'null');
+if (!data) {
+  data = defaultData;
+  localStorage.setItem('geo-todo', JSON.stringify(data));
+}
+
+// ── Header ─────────────────────────────────────────────────────────────
 function updateHeader() {
   const t = document.getElementById('list-title')?.value || data.title;
   const s = document.getElementById('list-sub')?.value   || data.sub;
@@ -197,7 +205,7 @@ function updateHeader() {
   data.title = t; data.sub = s;
 }
 
-// ── Render ────────────────────────────────────────────────────────────────────
+// ── Render ─────────────────────────────────────────────────────────────
 function render() {
   const cont  = document.getElementById('categories-container');
   cont.innerHTML = '';
@@ -252,7 +260,7 @@ function render() {
 function autoH(el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
 function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-// ── Mutations ─────────────────────────────────────────────────────────────────
+// ── Mutations ────────────────────────────────────────────────────────────
 function addItem(ci) {
   const inp = document.getElementById(`new-item-${ci}`);
   if (!inp || !inp.value.trim()) return;
@@ -287,7 +295,7 @@ function saveAll() {
   setTimeout(() => toast.remove(), 2500);
 }
 
-// ── Boot ──────────────────────────────────────────────────────────────────────
+// ── Boot ─────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   // Populate config inputs with saved data
   const titleInp = document.getElementById('list-title');
