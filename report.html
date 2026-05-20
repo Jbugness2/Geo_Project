@@ -3,115 +3,584 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Research Report — Geography Project</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Discover Japan</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Dancing+Script:wght@700&family=Raleway:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root { --earth:#2d4a3e;--sand:#e8d5b0;--clay:#c4703a;--mist:#f0ece3;--ink:#1a1a1a;--accent:#7eb89a; }
-  * { margin:0;padding:0;box-sizing:border-box; }
-  body { background:var(--mist); font-family:'DM Sans',sans-serif; color:var(--ink); }
-  nav { background:var(--earth); padding:14px 30px; }
-  nav a { color:var(--sand); text-decoration:none; font-size:0.85rem; letter-spacing:0.08em; }
-  nav a:hover { color:var(--accent); }
-  .page-title { background:var(--clay); color:white; padding:30px 40px; }
-  .page-title small { font-size:0.8rem; opacity:0.8; letter-spacing:0.1em; text-transform:uppercase; }
-  .page-title h1 { font-family:'Playfair Display',serif; font-size:2rem; margin-top:6px; }
-  .container { max-width:780px; margin:40px auto; padding:0 30px 60px; }
-  .note { background:#fff8e1; border-left:4px solid #f5c842; padding:12px 16px; border-radius:3px; font-size:0.85rem; color:#555; margin-bottom:30px; }
-  .report { background:white; padding:50px 60px; box-shadow:0 2px 20px rgba(0,0,0,0.08); border-radius:4px; }
-  .report-header { text-align:center; border-bottom:2px solid var(--earth); padding-bottom:20px; margin-bottom:30px; }
-  .report-header .field { background:#f5f5f5; border:1.5px dashed #ccc; border-radius:3px; padding:8px 14px; font-size:0.9rem; color:#aaa; font-style:italic; margin:6px auto; display:inline-block; min-width:200px; }
-  h2.section { font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--earth); margin:28px 0 12px; padding-bottom:6px; border-bottom:1px solid var(--sand); }
-  .field-block {
-    background:#f9f7f3;
-    border:1.5px dashed #ccc;
-    border-radius:3px;
-    padding:14px 16px;
-    margin-bottom:14px;
-    font-size:0.88rem;
-    color:#aaa;
-    font-style:italic;
-    min-height:80px;
-  }
-  .field-block strong { display:block; font-style:normal; color:var(--clay); font-size:0.75rem; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; }
-  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-  .ref-list { list-style:none; }
-  .ref-list li { padding:8px 0; border-bottom:1px solid #eee; font-size:0.85rem; color:#aaa; font-style:italic; }
-  .ref-list li::before { content:"[  ]  "; color:#ccc; font-style:normal; }
-  @media(max-width:600px) { .report { padding:30px 20px; } .two-col { grid-template-columns:1fr; } }
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --red: #c0392b;
+  --navy: #1b2a4a;
+  --cream: #faf5ee;
+  --blush: #f7ede8;
+  --gold: #c9a84c;
+  --text: #2c2c2c;
+  --light-text: #555;
+}
+
+body {
+  font-family: 'Raleway', sans-serif;
+  background: #d6cfc6;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.page-wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+/* HOME BAR */
+.home-bar {
+  margin-bottom: 1rem;
+}
+.home-bar a {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--navy);
+  text-decoration: none;
+  padding: 0.45rem 1.1rem;
+  border: 2px solid var(--navy);
+  border-radius: 3px;
+  background: rgba(255,255,255,0.5);
+  transition: background 0.2s, color 0.2s;
+}
+.home-bar a:hover { background: var(--navy); color: #fff; }
+
+/* BROCHURE: 3 equal columns with visible dividers */
+.brochure {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
+  box-shadow: 0 16px 50px rgba(0,0,0,0.4);
+  border-radius: 4px;
+  overflow: hidden;
+  /* Dividers between panels */
+  gap: 0;
+  border: 3px solid #888;
+}
+
+/* ════════════════════════════
+   PANEL 1 — LEFT (dark hero)
+════════════════════════════ */
+.panel-left {
+  background: linear-gradient(170deg, #141e36 0%, #2b1530 50%, #7a1515 100%);
+  padding: 2rem 1.6rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  border-right: 3px solid #888;
+  min-height: 820px;
+}
+
+/* floating sakura — purely decorative, won't affect flow */
+.sakura-layer {
+  position: relative;
+  pointer-events: none;
+  height: 0;        /* zero height so it doesn't push content */
+  overflow: visible;
+}
+.sakura-layer span {
+  position: absolute;
+  font-size: 1rem;
+  opacity: 0.3;
+  animation: sway 6s ease-in-out infinite;
+}
+.sakura-layer span:nth-child(1) { top: -180px; left: -5px;  animation-delay: 0s; }
+.sakura-layer span:nth-child(2) { top: -160px; right: -5px; animation-delay: 1.8s; }
+.sakura-layer span:nth-child(3) { top: -80px;  right: 10px; animation-delay: 3.2s; font-size: 0.8rem; }
+@keyframes sway {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-10px) rotate(12deg); }
+}
+
+.hero-eyebrow {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+}
+.hero-discover {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.6rem;
+  color: #fff;
+  line-height: 1.05;
+}
+.hero-japan {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 800;
+  font-size: 4.2rem;
+  line-height: 0.9;
+  color: var(--red);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+.hero-taglines {
+  margin-top: 0.8rem;
+}
+.hero-taglines p {
+  font-size: 0.7rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.72);
+  font-style: italic;
+  line-height: 2;
+  letter-spacing: 0.04em;
+}
+
+/* red circle quote */
+.quote-circle {
+  width: 148px;
+  height: 148px;
+  border-radius: 50%;
+  background: var(--red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1.1rem;
+  margin: 1.6rem auto 1.4rem;
+  flex-shrink: 0;
+}
+.quote-circle p {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 0.67rem;
+  color: #fff;
+  line-height: 1.6;
+}
+
+/* photo thumbnails */
+.thumb-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+.thumb {
+  height: 85px;
+  border-radius: 4px;
+  border: 2px solid rgba(255,255,255,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+.thumb.bamboo { background: linear-gradient(135deg,#1b4425,#2d7a38); }
+.thumb.castle { background: linear-gradient(135deg,#1a2a50,#2a4a80); }
+
+.hero-bottom {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.hero-bottom span {
+  font-size: 0.67rem;
+  color: rgba(255,255,255,0.55);
+  font-style: italic;
+}
+
+/* ════════════════════════════
+   PANEL 2 — MIDDLE (cream)
+════════════════════════════ */
+.panel-mid {
+  background: var(--cream);
+  padding: 1.8rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  border-right: 3px solid #aaa;
+}
+
+.why-header {
+  background: var(--navy);
+  text-align: center;
+  padding: 0.6rem 1rem;
+  border-radius: 3px;
+  margin-bottom: 1.4rem;
+  position: relative;
+}
+.why-header::before { content: '🌸'; position: absolute; left: 0.7rem; top: 50%; transform: translateY(-50%); font-size: 0.9rem; }
+.why-header::after  { content: '🌸'; position: absolute; right: 0.7rem; top: 50%; transform: translateY(-50%); font-size: 0.9rem; }
+.why-header h2 {
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.reason {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+  align-items: flex-start;
+}
+.r-icon {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.r-icon.red   { background: var(--red); }
+.r-icon.navy  { background: var(--navy); }
+.r-body h3 {
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+}
+.r-body p {
+  font-size: 0.69rem;
+  line-height: 1.65;
+  color: var(--light-text);
+}
+
+/* seasons box at bottom */
+.seasons-box {
+  margin-top: auto;
+  background: var(--blush);
+  border: 1px solid rgba(192,57,43,0.18);
+  border-radius: 6px;
+  padding: 0.9rem 1rem;
+}
+.seasons-label {
+  text-align: center;
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 0.75rem;
+}
+.seasons-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 0.3rem;
+  text-align: center;
+}
+.s-col .s-ico { font-size: 1.2rem; display: block; }
+.s-col h4 {
+  font-size: 0.62rem; font-weight: 800;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--navy); margin: 0.15rem 0 0.1rem;
+}
+.s-col .s-date { font-size: 0.58rem; color: var(--light-text); display: block; margin-bottom: 0.2rem; }
+.s-col p { font-size: 0.58rem; color: var(--light-text); line-height: 1.4; }
+.seasons-note {
+  text-align: center;
+  font-size: 0.62rem;
+  font-style: italic;
+  color: var(--light-text);
+  margin-top: 0.65rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(0,0,0,0.07);
+}
+
+/* ════════════════════════════
+   PANEL 3 — RIGHT (blush bg to differ from middle)
+════════════════════════════ */
+.panel-right {
+  background: #f0ebe2;   /* slightly warmer/darker than cream — clearly different */
+  display: flex;
+  flex-direction: column;
+}
+
+.exp-top {
+  padding: 1.5rem 1.5rem 0.8rem;
+}
+.exp-spark {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.exp-spark::before { content: '✦ '; }
+.exp-h {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.5rem;
+  color: var(--red);
+  line-height: 1;
+}
+.exp-sub {
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+
+/* 2×2 image+caption grid */
+.exp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  flex: 1;
+}
+.exp-cell {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+.exp-img {
+  height: 105px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.4rem;
+}
+.exp-img.shrine { background: linear-gradient(135deg,#b8cfe0,#7a9fb0); }
+.exp-img.city   { background: linear-gradient(135deg,#e8c090,#c8602a); }
+.exp-img.food   { background: linear-gradient(135deg,#f0d8b8,#d89050); }
+.exp-img.onsen  { background: linear-gradient(135deg,#b8cce8,#6080b8); }
+.exp-cap {
+  padding: 0.55rem 0.75rem 0.7rem;
+  flex: 1;
+}
+.exp-cap h4 {
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 0.2rem;
+}
+.exp-cap p { font-size: 0.64rem; color: var(--light-text); line-height: 1.5; }
+
+/* dark footer */
+.exp-footer {
+  background: var(--navy);
+  padding: 1.1rem 1.4rem 1rem;
+  text-align: center;
+}
+.exp-footer h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.06em;
+  line-height: 1.55;
+}
+.exp-footer .script {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.55rem;
+  color: var(--red);
+  display: block;
+  margin-top: 0.1rem;
+}
+.icons-row {
+  display: flex;
+  justify-content: center;
+  gap: 1.1rem;
+  margin-top: 0.9rem;
+}
+.icon-pill { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
+.icon-circle {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--red);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem;
+}
+.icon-pill span {
+  font-size: 0.56rem;
+  color: rgba(255,255,255,0.7);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-align: center;
+  max-width: 58px;
+  line-height: 1.3;
+}
 </style>
-<style>
-  .edit-only { display: none; }
-  body[data-edit-mode="on"] .field-block[contenteditable]:focus,
-  body[data-edit-mode="on"] .report-header .field[contenteditable]:focus { outline: 2px solid #7eb89a; }
-</style>
-<script src="auth.js" defer></script>
 </head>
 <body>
-<nav><a href="index.html">← Back to Project Hub</a></nav>
-<div class="page-title">
-  <small>Genre 2</small>
-  <h1>🔬 Research Report</h1>
-</div>
-<div class="container">
-  <div class="note">💡 Replace each dashed box with your content. Each box has a label telling you what to write.</div>
+<div class="page-wrap">
 
-  <div class="report">
-    <div class="report-header">
-      <div class="field">[ Report Title — e.g. "Physical and Human Systems of the Sahel Region" ]</div><br>
-      <div class="field">Author Name</div>
-      <div class="field">Course Name &amp; Section</div>
-      <div class="field">Date Submitted</div>
-    </div>
-
-    <h2 class="section">Abstract</h2>
-    <div class="field-block"><strong>1–2 paragraph summary of the entire report</strong>Summarize your region, the key physical and human systems you studied, your main findings, and your conclusion. Write this last.</div>
-
-    <h2 class="section">I. Introduction</h2>
-    <div class="field-block"><strong>Introduce your region and the essential question</strong>Where is this place? Why is it significant? State the geographic question your report will answer. Include a thesis statement.</div>
-
-    <h2 class="section">II. Physical Systems</h2>
-    <div class="two-col">
-      <div class="field-block"><strong>Landforms & Topography</strong>Describe the physical landscape: mountains, valleys, plains, plateaus, etc.</div>
-      <div class="field-block"><strong>Climate & Biomes</strong>What climate zone? What ecosystems or biomes exist here?</div>
-      <div class="field-block"><strong>Water Resources</strong>Major rivers, lakes, groundwater, access to fresh water.</div>
-      <div class="field-block"><strong>Natural Resources</strong>Minerals, forests, soil quality, energy sources.</div>
-    </div>
-
-    <h2 class="section">III. Human Systems</h2>
-    <div class="two-col">
-      <div class="field-block"><strong>Demographics & Settlement</strong>Population size, density, distribution, and urban vs. rural patterns.</div>
-      <div class="field-block"><strong>Culture & Society</strong>Languages, religions, traditions, and social structures.</div>
-      <div class="field-block"><strong>Economy</strong>GDP, industries, agriculture, trade relationships.</div>
-      <div class="field-block"><strong>Political Geography</strong>Government type, borders, international relationships.</div>
-    </div>
-
-    <h2 class="section">IV. Interaction of Physical & Human Systems</h2>
-    <div class="field-block"><strong>How does the physical environment shape human life here?</strong>This is the core of your essential question. Analyze at least 3 specific examples of how the land, water, or climate directly influences how people live, work, or organize society.</div>
-
-    <h2 class="section">V. Environmental Challenges</h2>
-    <div class="field-block"><strong>Current environmental issues and human impact</strong>Deforestation, desertification, flooding, pollution, climate change effects specific to this region.</div>
-
-    <h2 class="section">VI. Conclusion</h2>
-    <div class="field-block"><strong>Restate your thesis and summarize key findings</strong>What did you learn? How do physical and human systems define this place? Any forward-looking observations?</div>
-
-    <h2 class="section">References</h2>
-    <ul class="ref-list">
-      <li>Source 1 — Author, Title, Year, URL or Publication</li>
-      <li>Source 2 — Author, Title, Year, URL or Publication</li>
-      <li>Source 3 — Author, Title, Year, URL or Publication</li>
-      <li>Source 4 — Author, Title, Year, URL or Publication</li>
-      <li>Source 5 — Add more as needed</li>
-    </ul>
+  <div class="home-bar">
+    <a href="index.html">← Home</a>
   </div>
+
+  <div class="brochure">
+
+    <!-- ══ LEFT PANEL ══ -->
+    <div class="panel-left">
+
+      <!-- decorative sakura that don't affect layout -->
+      <div class="sakura-layer">
+        <span>🌸</span><span>🌸</span><span>🌸</span>
+      </div>
+
+      <div class="hero-eyebrow">✈ Your Adventure Starts Here</div>
+      <div class="hero-discover">Discover</div>
+      <div class="hero-japan">Japan</div>
+
+      <div class="hero-taglines">
+        <p>Timeless Culture.</p>
+        <p>Breathtaking Beauty.</p>
+        <p>Unforgettable Experiences.</p>
+      </div>
+
+      <div class="quote-circle">
+        <p>Japan is where tradition meets innovation, and every moment becomes a memory.</p>
+      </div>
+
+      <div class="thumb-row">
+        <div class="thumb bamboo">🎋</div>
+        <div class="thumb castle">🏯</div>
+      </div>
+
+      <div class="hero-bottom">
+        <span>🌐</span>
+        <span>Your adventure in Japan starts here!</span>
+      </div>
+
+    </div><!-- end left -->
+
+    <!-- ══ MIDDLE PANEL ══ -->
+    <div class="panel-mid">
+
+      <div class="why-header"><h2>Why Visit Japan?</h2></div>
+
+      <div class="reason">
+        <div class="r-icon red">⛩️</div>
+        <div class="r-body">
+          <h3>Rich Culture &amp; History</h3>
+          <p>From ancient temples and shrines to historic castles and traditional tea ceremonies, Japan's heritage is truly captivating.</p>
+        </div>
+      </div>
+
+      <div class="reason">
+        <div class="r-icon navy">🗻</div>
+        <div class="r-body">
+          <h3>Stunning Scenery</h3>
+          <p>Experience breathtaking landscapes from majestic mountains and serene gardens to tropical beaches and vibrant cityscapes.</p>
+        </div>
+      </div>
+
+      <div class="reason">
+        <div class="r-icon red">🍜</div>
+        <div class="r-body">
+          <h3>Incredible Food</h3>
+          <p>Savor world-famous cuisine like sushi, ramen, tempura, and more. Every region offers its own unique flavors!</p>
+        </div>
+      </div>
+
+      <div class="reason">
+        <div class="r-icon navy">🚄</div>
+        <div class="r-body">
+          <h3>Modern &amp; Convenient</h3>
+          <p>Enjoy top-notch hospitality, safe cities, and an efficient transportation system that makes travel easy and enjoyable.</p>
+        </div>
+      </div>
+
+      <div class="reason">
+        <div class="r-icon red">🛍️</div>
+        <div class="r-body">
+          <h3>Unique Shopping</h3>
+          <p>From high-tech gadgets and trendy fashion to traditional crafts and souvenirs — treasures you won't find anywhere else.</p>
+        </div>
+      </div>
+
+      <div class="seasons-box">
+        <div class="seasons-label">🌸 Best Time to Visit 🌸</div>
+        <div class="seasons-grid">
+          <div class="s-col">
+            <span class="s-ico">🌸</span>
+            <h4>Spring</h4>
+            <span class="s-date">Mar – May</span>
+            <p>Cherry blossoms in full bloom</p>
+          </div>
+          <div class="s-col">
+            <span class="s-ico">🌿</span>
+            <h4>Summer</h4>
+            <span class="s-date">Jun – Aug</span>
+            <p>Festivals, fireworks &amp; vibrant nature</p>
+          </div>
+          <div class="s-col">
+            <span class="s-ico">🍂</span>
+            <h4>Autumn</h4>
+            <span class="s-date">Sep – Nov</span>
+            <p>Stunning fall colors &amp; mild weather</p>
+          </div>
+          <div class="s-col">
+            <span class="s-ico">❄️</span>
+            <h4>Winter</h4>
+            <span class="s-date">Dec – Feb</span>
+            <p>Snowy wonderlands &amp; hot springs</p>
+          </div>
+        </div>
+        <div class="seasons-note">No matter the season, Japan has something beautiful to offer you! ❤️</div>
+      </div>
+
+    </div><!-- end middle -->
+
+    <!-- ══ RIGHT PANEL ══ -->
+    <div class="panel-right">
+
+      <div class="exp-top">
+        <div class="exp-spark">Experience</div>
+        <div class="exp-h">Japan</div>
+        <div class="exp-sub">Your Way</div>
+      </div>
+
+      <div class="exp-grid">
+        <div class="exp-cell">
+          <div class="exp-img shrine">⛩️</div>
+          <div class="exp-cap">
+            <h4>Explore</h4>
+            <p>Visit iconic landmarks, peaceful shrines, and UNESCO World Heritage Sites.</p>
+          </div>
+        </div>
+        <div class="exp-cell">
+          <div class="exp-img city">🏮</div>
+          <div class="exp-cap">
+            <h4>Experience</h4>
+            <p>Dive into local culture, exciting nightlife, and friendly traditions.</p>
+          </div>
+        </div>
+        <div class="exp-cell">
+          <div class="exp-img food">🍱</div>
+          <div class="exp-cap">
+            <h4>Taste</h4>
+            <p>Delight in authentic dishes made with fresh, seasonal ingredients.</p>
+          </div>
+        </div>
+        <div class="exp-cell">
+          <div class="exp-img onsen">♨️</div>
+          <div class="exp-cap">
+            <h4>Relax</h4>
+            <p>Unwind in natural hot springs, beautiful gardens, and tranquil spaces.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-footer">
+        <h3>COME FOR THE SIGHTS,<br>STAY FOR THE MEMORIES.</h3>
+        <span class="script">Japan Awaits You!</span>
+        <div class="icons-row">
+          <div class="icon-pill">
+            <div class="icon-circle">✈️</div>
+            <span>Easy to Reach</span>
+          </div>
+          <div class="icon-pill">
+            <div class="icon-circle">🛡️</div>
+            <span>Safe &amp; Clean</span>
+          </div>
+          <div class="icon-pill">
+            <div class="icon-circle">❤️</div>
+            <span>Welcoming People</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end right -->
+
+  </div><!-- end brochure -->
 </div>
-<script>
-const observer = new MutationObserver(() => {
-  const on = document.body.dataset.editMode === 'on';
-  document.querySelectorAll('.field-block, .report-header .field, .ref-list li').forEach(f => {
-    f.contentEditable = on ? 'true' : 'false';
-  });
-});
-observer.observe(document.body, { attributes: true, attributeFilter: ['data-edit-mode'] });
-</script>
 </body>
 </html>
