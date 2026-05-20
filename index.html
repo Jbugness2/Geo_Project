@@ -122,7 +122,6 @@
     margin-top: 40px;
   }
 </style>
-<script src="auth.js" defer></script>
 </head>
 <body>
 
@@ -137,17 +136,6 @@
   <span id="view-mode-badge" style="float:right;font-size:0.78rem;background:rgba(255,255,255,0.15);
     padding:3px 10px;border-radius:10px;font-style:normal;letter-spacing:0.05em;"></span>
 </div>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const badge = document.getElementById('view-mode-badge');
-  const update = () => {
-    const on = document.body.dataset.editMode === 'on';
-    badge.textContent = on ? '✏️ Edit Mode Active' : '👁 View Mode';
-    badge.style.background = on ? 'rgba(126,184,154,0.3)' : 'rgba(255,255,255,0.15)';
-  };
-  new MutationObserver(update).observe(document.body, { attributes: true, attributeFilter: ['data-edit-mode'] });
-});
-</script>
 
 <main>
   <p class="section-label">Project Components</p>
