@@ -4,72 +4,99 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Geography Project Hub</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Raleway:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --earth: #1e3f32;
-    --sand: #D4af37;
-    --clay: #B66A50;
-    --mist: #4c4c4c;
-    --ink: #1a1a1a;
-    --accent: #ffffff;
+    --navy: #1b2a4a;
+    --navy-dark: #111e35;
+    --red: #c0392b;
+    --cream: #faf5ee;
+    --cream-dark: #f0e9dc;
+    --gold: #c9a84c;
+    --ink: #2c2c2c;
+    --muted: #6a6258;
+    --rule: #ddd5c4;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    background: var(--mist);
-    font-family: 'DM Sans', sans-serif;
+    background: var(--cream-dark);
+    font-family: 'Raleway', sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
   }
+  nav {
+    background: var(--navy-dark);
+    padding: 12px 30px;
+    border-bottom: 2px solid var(--gold);
+  }
+  nav span {
+    color: var(--gold);
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
   header {
-    background: var(--earth);
-    color: var(--sand);
-    padding: 60px 40px 40px;
+    background: var(--navy);
+    color: var(--cream);
+    padding: 60px 40px 50px;
     position: relative;
     overflow: hidden;
+    border-bottom: 4px solid var(--red);
   }
   header::before {
-    content: '🌍';
+    content: '日本';
     position: absolute;
+    font-family: 'Noto Serif JP', serif;
     font-size: 220px;
-    right: -20px;
-    top: -40px;
-    opacity: 0.08;
+    font-weight: 700;
+    right: -10px;
+    top: -20px;
+    opacity: 0.06;
+    color: var(--gold);
+    line-height: 1;
+  }
+  header .eyebrow {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
   }
   header h1 {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-size: clamp(1.8rem, 5vw, 3.2rem);
+    font-weight: 900;
     line-height: 1.1;
-    max-width: 700px;
+    max-width: 680px;
+    color: var(--cream);
   }
-  header p {
-    margin-top: 12px;
-    color: var(--accent);
-    font-size: 1rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    font-weight: 500;
+  header h1 em {
+    font-style: italic;
+    color: var(--gold);
   }
   .essential-q {
-    background: var(--clay);
+    background: var(--red);
     color: white;
-    padding: 16px 40px;
-    font-size: 0.95rem;
+    padding: 14px 40px;
+    font-size: 0.9rem;
     font-style: italic;
+    border-bottom: 3px solid var(--navy-dark);
   }
-  .essential-q strong { font-style: normal; font-weight: 500; }
+  .essential-q strong { font-style: normal; font-weight: 700; }
   main {
     max-width: 1100px;
     margin: 0 auto;
     padding: 50px 30px;
   }
   .section-label {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--clay);
-    font-weight: 500;
-    margin-bottom: 20px;
+    letter-spacing: 0.2em;
+    color: var(--red);
+    font-weight: 700;
+    margin-bottom: 22px;
   }
   .grid {
     display: grid;
@@ -77,7 +104,7 @@
     gap: 20px;
   }
   .card {
-    background: white;
+    background: var(--cream);
     border-radius: 4px;
     padding: 30px;
     text-decoration: none;
@@ -86,55 +113,56 @@
     transition: all 0.25s ease;
     position: relative;
     overflow: hidden;
+    border-top: 3px solid var(--rule);
   }
   .card::after {
     content: '';
     position: absolute;
     bottom: 0; left: 0; right: 0;
     height: 4px;
-    background: var(--earth);
+    background: var(--red);
     transform: scaleX(0);
     transition: transform 0.25s ease;
     transform-origin: left;
   }
-  .card:hover { border-color: var(--earth); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(45,74,62,0.12); }
+  .card:hover { border-color: var(--navy); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(27,42,74,0.15); }
   .card:hover::after { transform: scaleX(1); }
   .card-icon { font-size: 2.2rem; margin-bottom: 14px; display: block; }
-  .card h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 8px; }
-  .card p { font-size: 0.88rem; color: #666; line-height: 1.5; }
+  .card h2 { font-family: 'Playfair Display', serif; font-size: 1.25rem; margin-bottom: 8px; color: var(--navy); }
+  .card p { font-size: 0.87rem; color: var(--muted); line-height: 1.55; }
   .card .tag {
     display: inline-block;
     margin-top: 14px;
-    font-size: 0.72rem;
-    background: var(--mist);
-    color: var(--earth);
+    font-size: 0.7rem;
+    background: var(--navy);
+    color: var(--gold);
     padding: 4px 10px;
     border-radius: 20px;
-    font-weight: 500;
-    letter-spacing: 0.05em;
+    font-weight: 700;
+    letter-spacing: 0.08em;
   }
   footer {
     text-align: center;
     padding: 30px;
-    color: #999;
-    font-size: 0.8rem;
-    border-top: 1px solid #e0ddd6;
-    margin-top: 40px;
+    color: var(--muted);
+    font-size: 0.78rem;
+    border-top: 1px solid var(--rule);
+    margin-top: 20px;
+    font-family: 'Noto Serif JP', serif;
   }
 </style>
 </head>
 <body>
 
-<nav style="background:#2d4a3e;padding:10px 30px;"></nav>
+<nav><span>⛩ Japan Geography Project</span></nav>
+
 <header>
-  <p>Geography Project</p>
-  <h1>How Physical & Human Systems Shape a Place</h1>
+  <p class="eyebrow">✦ Multi-Genre Geography Project · 30 Points</p>
+  <h1>How Physical &amp; Human Systems<br><em>Shape a Place</em></h1>
 </header>
 
 <div class="essential-q">
   <strong>Essential Question:</strong> How do physical and human systems interact to define a region's identity, challenges, and opportunities?
-  <span id="view-mode-badge" style="float:right;font-size:0.78rem;background:rgba(255,255,255,0.15);
-    padding:3px 10px;border-radius:10px;font-style:normal;letter-spacing:0.05em;"></span>
 </div>
 
 <main>
@@ -145,7 +173,7 @@
       <span class="card-icon">📄</span>
       <h2>Pamphlet</h2>
       <p>A tri-fold informational brochure covering Tourism attractions in Japan.</p>
-      <span class="tag">1</span>
+      <span class="tag">Genre 1</span>
     </a>
 
     <a href="report.html" class="card">
@@ -186,6 +214,6 @@
   </div>
 </main>
 
-<footer>Multi-Genre Geography Project &nbsp;·&nbsp; 30 Points Total &nbsp;·&nbsp; All pages open in the same folder</footer>
+<footer>Multi-Genre Geography Project &nbsp;·&nbsp; 30 Points Total &nbsp;·&nbsp; 日本 &nbsp;·&nbsp; All pages open in the same folder</footer>
 </body>
 </html>
