@@ -9,19 +9,19 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --cream: #f5f0e8;
-    --parchment: #ede5d0;
-    --bark: #5a3e2b;
-    --bark-light: #8b6347;
-    --ink: #2c1810;
-    --moss: #4a5c3a;
-    --sky: #c8dce8;
-    --sky-deep: #a0bdd0;
+    --cream: #faf5ee;
+    --parchment: #f0e9dc;
+    --bark: #1b2a4a;
+    --bark-light: #2a3d65;
+    --ink: #2c2c2c;
+    --moss: #1b2a4a;
+    --sky: #c8d8e8;
+    --sky-deep: #a0b8d0;
     --blossom: #e8b4c0;
     --blossom-soft: #f2d5dc;
-    --accent: #9b2335;
-    --gold: #c4922a;
-    --correct: #3d6b45;
+    --accent: #c0392b;
+    --gold: #c9a84c;
+    --correct: #2e6b3e;
     --wrong: #9b2335;
   }
 
@@ -105,7 +105,7 @@
     padding: 20px 28px 16px;
     text-align: center;
     position: relative;
-    border-bottom: 3px solid var(--gold);
+    border-bottom: 4px solid var(--accent);
   }
 
   .card-header h1 {
@@ -328,6 +328,24 @@
     .clues-panel { max-width: 100%; border-right: none; border-bottom: 1px solid rgba(90,62,43,0.15); }
     .card-header h1 { font-size: 20px; }
   }
+
+  nav {
+    position: relative;
+    z-index: 10;
+    background: rgba(17, 30, 53, 0.97);
+    padding: 12px 24px;
+    border-bottom: 2px solid var(--gold);
+  }
+  nav a {
+    color: var(--gold);
+    text-decoration: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  nav a:hover { color: #fff; }
 </style>
 </head>
 <body>
@@ -593,7 +611,6 @@ for (let r = 0; r < ROWS; r++) {
         if (e.key === 'ArrowUp')    { e.preventDefault(); moveFocus(r-1, c); }
       });
 
-      inp.addEventListener('focus', () => highlightWord(r, c));
       inp.addEventListener('click', () => highlightWord(r, c));
 
       wrap.appendChild(inp);
@@ -607,6 +624,12 @@ for (let r = 0; r < ROWS; r++) {
   }
 }
 
+// ── DIRECTION STATE ──
+// 'A' = across, 'D' = down. Persists while typing; click same cell to toggle.
+let currentDir = 'A';
+let lastClickedCell = null;
+let currentWordCells = [];
+
 // ── FOCUS HELPERS ──
 function moveFocus(r, c) {
   const inp = inputs[`${r},${c}`];
@@ -614,30 +637,58 @@ function moveFocus(r, c) {
 }
 
 function advanceFocus(r, c) {
-  // Try right first, then down
-  if (inputs[`${r},${c+1}`]) moveFocus(r, c+1);
-  else if (inputs[`${r+1},${c}`]) moveFocus(r+1, c);
+  if (currentDir === 'A') {
+    if (inputs[`${r},${c+1}`]) moveFocus(r, c+1);
+  } else {
+    if (inputs[`${r+1},${c}`]) moveFocus(r+1, c);
+  }
 }
 
 function retreatFocus(r, c) {
-  if (inputs[`${r},${c-1}`]) moveFocus(r, c-1);
-  else if (inputs[`${r-1},${c}`]) moveFocus(r-1, c);
+  if (currentDir === 'A') {
+    if (inputs[`${r},${c-1}`]) moveFocus(r, c-1);
+  } else {
+    if (inputs[`${r-1},${c}`]) moveFocus(r-1, c);
+  }
 }
 
 // ── HIGHLIGHT WORD ──
-let currentWordCells = [];
-
-function highlightWord(r, c) {
+function highlightWord(r, c, fromClue) {
   currentWordCells.forEach(k => {
     const inp = inputs[k];
     if (inp) inp.classList.remove('highlighted');
   });
   currentWordCells = [];
 
-  // Find which word(s) this cell belongs to and highlight the best one
   const across = placements.find(p => p.dir === 'A' && p.r === r && c >= p.c && c < p.c + p.word.length);
   const down   = placements.find(p => p.dir === 'D' && p.c === c && r >= p.r && r < p.r + p.word.length);
-  const target = across || down;
+
+  let target;
+  if (fromClue) {
+    // Clue panel clicked — lock direction to that clue
+    target = fromClue;
+    currentDir = target.dir;
+    lastClickedCell = `${r},${c}`;
+  } else {
+    const cellKey = `${r},${c}`;
+    if (across && down) {
+      // Intersection: toggle on repeated click, else keep currentDir
+      if (lastClickedCell === cellKey) {
+        // Same cell clicked again — toggle direction
+        currentDir = currentDir === 'A' ? 'D' : 'A';
+      }
+      // else keep currentDir as-is (set when user first arrived here)
+      target = currentDir === 'A' ? across : down;
+      // If currentDir word doesn't exist at this cell, fall back
+      if (!target) { target = across || down; currentDir = target.dir; }
+    } else if (across) {
+      target = across; currentDir = 'A';
+    } else if (down) {
+      target = down; currentDir = 'D';
+    }
+    lastClickedCell = cellKey;
+  }
+
   if (!target) return;
 
   for (let i = 0; i < target.word.length; i++) {
@@ -668,7 +719,7 @@ function buildClues() {
     div.innerHTML = `<span class="clue-num">${p.num}</span><span>${p.clue}</span>`;
     div.addEventListener('click', () => {
       const inp = inputs[`${p.r},${p.c}`];
-      if (inp) { inp.focus(); highlightWord(p.r, p.c); }
+      if (inp) { inp.focus(); highlightWord(p.r, p.c, p); }
     });
     return div;
   }
