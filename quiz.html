@@ -4,276 +4,113 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quiz — Geography Project</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Playfair+Display:wght@700;900&family=Raleway:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --earth: #2d4a3e;
-    --sand: #e8d5b0;
-    --clay: #c4703a;
-    --mist: #f0ece3;
-    --ink: #1a1a1a;
-    --accent: #7eb89a;
-    --correct: #3d6b45;
+    --navy: #1b2a4a;
+    --navy-dark: #111e35;
+    --red: #c0392b;
+    --cream: #faf5ee;
+    --cream-dark: #f0e9dc;
+    --gold: #c9a84c;
+    --ink: #2c2c2c;
+    --muted: #6a6258;
+    --rule: #ddd5c4;
+    --correct: #2e6b3e;
     --wrong: #9b2335;
   }
-
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  body {
-    background: var(--mist);
-    font-family: 'DM Sans', sans-serif;
-    color: var(--ink);
-  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--cream-dark); font-family: 'Raleway', sans-serif; color: var(--ink); }
 
   nav {
-    background: var(--earth);
-    padding: 14px 30px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    background: var(--navy-dark);
+    padding: 12px 30px;
+    border-bottom: 2px solid var(--gold);
+    display: flex; align-items: center; justify-content: space-between;
   }
-
-  nav a {
-    color: var(--sand);
-    text-decoration: none;
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
-  }
+  nav a { color: var(--gold); text-decoration: none; font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; }
+  nav a:hover { color: #fff; }
 
   .page-title {
-    background: var(--clay);
-    color: white;
-    padding: 30px 40px;
+    background: var(--navy);
+    color: var(--cream);
+    padding: 36px 40px;
+    border-bottom: 4px solid var(--red);
+    position: relative; overflow: hidden;
   }
+  .page-title::before {
+    content: '日本'; font-family: 'Noto Serif JP', serif; font-size: 120px; font-weight: 700;
+    position: absolute; right: 20px; top: -10px; opacity: 0.06; color: var(--gold);
+  }
+  .page-title small { font-size: 0.72rem; opacity: 0.75; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); }
+  .page-title h1 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-top: 6px; }
 
-  .page-title small {
-    font-size: 0.8rem;
-    opacity: 0.8;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .page-title h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 2rem;
-    margin-top: 6px;
-  }
-
-  .container {
-    max-width: 800px;
-    margin: 30px auto;
-    padding: 0 20px 60px;
-  }
+  .container { max-width: 800px; margin: 36px auto; padding: 0 20px 70px; }
 
   .quiz-card {
-    background: white;
-    border-radius: 8px;
-    padding: 32px 40px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+    background: var(--cream);
+    border-radius: 6px;
+    padding: 36px 40px;
+    box-shadow: 0 4px 20px rgba(27,42,74,0.1);
+    border-top: 4px solid var(--navy);
   }
 
   .quiz-header {
-    border-bottom: 2px solid var(--earth);
-    padding-bottom: 16px;
-    margin-bottom: 28px;
+    border-bottom: 2px solid var(--navy);
+    padding-bottom: 18px;
+    margin-bottom: 30px;
   }
+  .quiz-header h2 { font-family: 'Playfair Display', serif; font-size: 1.55rem; color: var(--navy); }
+  .quiz-header .meta { font-size: 0.84rem; color: var(--muted); margin-top: 8px; }
 
-  .quiz-header h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem;
-    color: var(--earth);
-  }
+  .question-block { margin-bottom: 30px; padding-bottom: 24px; border-bottom: 1px solid var(--rule); }
+  .question-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
 
-  .quiz-header .meta {
-    font-size: 0.85rem;
-    color: #888;
-    margin-top: 8px;
-  }
+  .q-number { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--red); margin-bottom: 8px; }
+  .q-text { font-size: 0.97rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; line-height: 1.5; }
 
-  .question-block {
-    margin-bottom: 32px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid #e8ddd6;
-  }
-
-  .question-block:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-  }
-
-  .q-number {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--earth);
-    margin-bottom: 8px;
-  }
-
-  .q-text {
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--ink);
-    margin-bottom: 14px;
-    line-height: 1.5;
-  }
-
-  .options-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-
+  .options-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
   .option {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 12px;
-    border: 1.5px solid #ddd;
-    border-radius: 6px;
-    background: #fafafa;
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 11px 14px;
+    border: 1.5px solid var(--rule);
+    border-radius: 4px;
+    background: #fff;
     cursor: pointer;
     transition: all 0.2s;
   }
+  .option:hover { background: var(--cream-dark); border-color: var(--navy); }
+  .option input[type="radio"] { margin-top: 3px; accent-color: var(--navy); cursor: pointer; width: 17px; height: 17px; }
+  .option label { flex: 1; cursor: pointer; font-size: 0.93rem; line-height: 1.4; }
 
-  .option:hover {
-    background: #f0f0f0;
-    border-color: var(--accent);
-  }
+  .feedback { font-size: 0.88rem; margin-top: 10px; padding: 9px 12px; border-radius: 4px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.correct { background: rgba(46,107,62,0.1); border-left: 4px solid var(--correct); color: var(--correct); }
+  .feedback.wrong { background: rgba(155,35,53,0.1); border-left: 4px solid var(--wrong); color: var(--wrong); }
 
-  .option input[type="radio"] {
-    margin-top: 3px;
-    accent-color: var(--earth);
-    cursor: pointer;
-    width: 18px;
-    height: 18px;
-  }
-
-  .option label {
-    flex: 1;
-    cursor: pointer;
-    font-size: 0.95rem;
-    line-height: 1.4;
-  }
-
-  .feedback {
-    font-size: 0.9rem;
-    margin-top: 10px;
-    padding: 10px 12px;
-    border-radius: 5px;
-    display: none;
-  }
-
-  .feedback.show {
-    display: block;
-  }
-
-  .feedback.correct {
-    background: rgba(61, 107, 69, 0.12);
-    border-left: 4px solid var(--correct);
-    color: var(--correct);
-  }
-
-  .feedback.wrong {
-    background: rgba(155, 35, 53, 0.12);
-    border-left: 4px solid var(--wrong);
-    color: var(--wrong);
-  }
-
-  .controls {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    margin-top: 36px;
-    flex-wrap: wrap;
-  }
-
+  .controls { display: flex; gap: 12px; justify-content: center; margin-top: 36px; flex-wrap: wrap; }
   .btn {
-    display: inline-block;
-    padding: 12px 24px;
-    border-radius: 6px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 500;
-    cursor: pointer;
-    border: none;
-    transition: all 0.2s;
+    display: inline-block; padding: 11px 24px; border-radius: 4px;
+    font-family: 'Raleway', sans-serif; font-size: 0.9rem; font-weight: 700;
+    cursor: pointer; border: none; transition: all 0.2s; letter-spacing: 0.05em;
   }
+  .btn-primary { background: var(--navy); color: var(--gold); }
+  .btn-primary:hover { background: var(--navy-dark); }
+  .btn-secondary { background: transparent; color: var(--navy); border: 2px solid var(--navy); }
+  .btn-secondary:hover { background: rgba(27,42,74,0.08); }
 
-  .btn-primary {
-    background: var(--earth);
-    color: white;
-  }
-
-  .btn-primary:hover {
-    background: #1f3329;
-  }
-
-  .btn-secondary {
-    background: transparent;
-    color: var(--earth);
-    border: 1.5px solid var(--earth);
-  }
-
-  .btn-secondary:hover {
-    background: rgba(45, 74, 62, 0.1);
-  }
-
-  .results {
-    margin-top: 36px;
-    padding: 20px;
-    border-radius: 6px;
-    text-align: center;
-    display: none;
-  }
-
-  .results.show {
-    display: block;
-  }
-
-  .results.passed {
-    background: rgba(61, 107, 69, 0.12);
-    border: 2px solid var(--correct);
-    color: var(--correct);
-  }
-
-  .results.failed {
-    background: rgba(155, 35, 53, 0.12);
-    border: 2px solid var(--wrong);
-    color: var(--wrong);
-  }
-
-  .results-score {
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
-
-  .results-msg {
-    font-size: 1rem;
-  }
+  .results { margin-top: 36px; padding: 22px; border-radius: 6px; text-align: center; display: none; }
+  .results.show { display: block; }
+  .results.passed { background: rgba(46,107,62,0.1); border: 2px solid var(--correct); color: var(--correct); }
+  .results.failed { background: rgba(155,35,53,0.1); border: 2px solid var(--wrong); color: var(--wrong); }
+  .results-score { font-size: 1.8rem; font-weight: 700; margin-bottom: 8px; }
+  .results-msg { font-size: 0.97rem; }
 
   @media (max-width: 620px) {
-    .page-title h1 {
-      font-size: 1.5rem;
-    }
-
-    .quiz-card {
-      padding: 20px;
-    }
-
-    .controls {
-      flex-direction: column;
-    }
-
-    .btn {
-      width: 100%;
-    }
+    .page-title h1 { font-size: 1.5rem; }
+    .quiz-card { padding: 20px; }
+    .controls { flex-direction: column; }
+    .btn { width: 100%; }
   }
 </style>
 </head>
@@ -284,7 +121,7 @@
 </nav>
 
 <div class="page-title">
-  <small>Assessment</small>
+  <small>Genre 4 · Assessment</small>
   <h1>📋 Geography Quiz</h1>
 </div>
 
@@ -295,267 +132,129 @@
       <div class="meta">Answer all questions and click <strong>Check Answers</strong> to see your score.</div>
     </div>
 
-    <!-- ════════════════════════════════════════════════════════════
-         EDIT QUESTIONS HERE — add, remove, or change questions below
-         ════════════════════════════════════════════════════════════ -->
-
     <form id="quiz-form">
 
-      <!-- Question 1 -->
       <div class="question-block">
         <div class="q-number">Question 1</div>
         <div class="q-text">Who is traditionally considered the founder of Japan?</div>
         <div class="options-list">
-          <div class="option">
-            <input type="radio" name="q1" value="a" id="q1a">
-            <label for="q1a">Emperor Jimmu</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q1" value="b" id="q1b">
-            <label for="q1b">Tokugawa Ieyasu</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q1" value="c" id="q1c">
-            <label for="q1c">Emperor Meiji</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q1" value="d" id="q1d">
-            <label for="q1d">Oda Nobunaga</label>
-          </div>
+          <div class="option"><input type="radio" name="q1" value="a" id="q1a"><label for="q1a">Emperor Jimmu</label></div>
+          <div class="option"><input type="radio" name="q1" value="b" id="q1b"><label for="q1b">Tokugawa Ieyasu</label></div>
+          <div class="option"><input type="radio" name="q1" value="c" id="q1c"><label for="q1c">Emperor Meiji</label></div>
+          <div class="option"><input type="radio" name="q1" value="d" id="q1d"><label for="q1d">Oda Nobunaga</label></div>
         </div>
         <div class="feedback" data-question="q1"></div>
       </div>
-      
-      <!-- Question 2 -->
+
       <div class="question-block">
         <div class="q-number">Question 2</div>
         <div class="q-text">In what year did the Heian Period begin?</div>
         <div class="options-list">
-          <div class="option">
-            <input type="radio" name="q2" value="a" id="q2a">
-            <label for="q2a">794 CE</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q2" value="b" id="q2b">
-            <label for="q2b">1185 CE</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q2" value="c" id="q2c">
-            <label for="q2c">1603 CE</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q2" value="d" id="q2d">
-            <label for="q2d">1868 CE</label>
-          </div>
+          <div class="option"><input type="radio" name="q2" value="a" id="q2a"><label for="q2a">794 CE</label></div>
+          <div class="option"><input type="radio" name="q2" value="b" id="q2b"><label for="q2b">1185 CE</label></div>
+          <div class="option"><input type="radio" name="q2" value="c" id="q2c"><label for="q2c">1603 CE</label></div>
+          <div class="option"><input type="radio" name="q2" value="d" id="q2d"><label for="q2d">1868 CE</label></div>
         </div>
         <div class="feedback" data-question="q2"></div>
       </div>
-      
-      <!-- Question 3 -->
+
       <div class="question-block">
         <div class="q-number">Question 3</div>
         <div class="q-text">What type of government began in Japan in 1185?</div>
         <div class="options-list">
-          <div class="option">
-            <input type="radio" name="q3" value="a" id="q3a">
-            <label for="q3a">Democracy</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q3" value="b" id="q3b">
-            <label for="q3b">Samurai Shogunate</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q3" value="c" id="q3c">
-            <label for="q3c">Constitutional Monarchy</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q3" value="d" id="q3d">
-            <label for="q3d">Military Republic</label>
-          </div>
+          <div class="option"><input type="radio" name="q3" value="a" id="q3a"><label for="q3a">Democracy</label></div>
+          <div class="option"><input type="radio" name="q3" value="b" id="q3b"><label for="q3b">Samurai Shogunate</label></div>
+          <div class="option"><input type="radio" name="q3" value="c" id="q3c"><label for="q3c">Constitutional Monarchy</label></div>
+          <div class="option"><input type="radio" name="q3" value="d" id="q3d"><label for="q3d">Military Republic</label></div>
         </div>
         <div class="feedback" data-question="q3"></div>
       </div>
-      
-      <!-- Question 4 -->
+
       <div class="question-block">
         <div class="q-number">Question 4</div>
         <div class="q-text">What important item did Europeans introduce to Japan in 1543?</div>
         <div class="options-list">
-          <div class="option">
-            <input type="radio" name="q4" value="a" id="q4a">
-            <label for="q4a">Printing Presses</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q4" value="b" id="q4b">
-            <label for="q4b">Firearms</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q4" value="c" id="q4c">
-            <label for="q4c">Steam Engines</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q4" value="d" id="q4d">
-            <label for="q4d">Automobiles</label>
-          </div>
+          <div class="option"><input type="radio" name="q4" value="a" id="q4a"><label for="q4a">Printing Presses</label></div>
+          <div class="option"><input type="radio" name="q4" value="b" id="q4b"><label for="q4b">Firearms</label></div>
+          <div class="option"><input type="radio" name="q4" value="c" id="q4c"><label for="q4c">Steam Engines</label></div>
+          <div class="option"><input type="radio" name="q4" value="d" id="q4d"><label for="q4d">Automobiles</label></div>
         </div>
         <div class="feedback" data-question="q4"></div>
       </div>
-      
-      <!-- Question 5 -->
+
       <div class="question-block">
         <div class="q-number">Question 5</div>
         <div class="q-text">Who established the Tokugawa Shogunate in 1603?</div>
         <div class="options-list">
-          <div class="option">
-            <input type="radio" name="q5" value="a" id="q5a">
-            <label for="q5a">Tokugawa Ieyasu</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q5" value="b" id="q5b">
-            <label for="q5b">Emperor Hirohito</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q5" value="c" id="q5c">
-            <label for="q5c">Minamoto Yoritomo</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q5" value="d" id="q5d">
-            <label for="q5d">Miyamoto Musashi</label>
-          </div>
+          <div class="option"><input type="radio" name="q5" value="a" id="q5a"><label for="q5a">Tokugawa Ieyasu</label></div>
+          <div class="option"><input type="radio" name="q5" value="b" id="q5b"><label for="q5b">Emperor Hirohito</label></div>
+          <div class="option"><input type="radio" name="q5" value="c" id="q5c"><label for="q5c">Minamoto Yoritomo</label></div>
+          <div class="option"><input type="radio" name="q5" value="d" id="q5d"><label for="q5d">Miyamoto Musashi</label></div>
         </div>
         <div class="feedback" data-question="q5"></div>
       </div>
-      
-      <!-- Question 6 -->
+
       <div class="question-block">
         <div class="q-number">Question 6</div>
         <div class="q-text">Which American commander pressured Japan to open trade in 1853?</div>
         <div class="options-list">
-          <div class="option">
-            <input type="radio" name="q6" value="a" id="q6a">
-            <label for="q6a">Douglas MacArthur</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q6" value="b" id="q6b">
-            <label for="q6b">George Washington</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q6" value="c" id="q6c">
-            <label for="q6c">Commodore Perry</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q6" value="d" id="q6d">
-            <label for="q6d">Ulysses Grant</label>
-          </div>
+          <div class="option"><input type="radio" name="q6" value="a" id="q6a"><label for="q6a">Douglas MacArthur</label></div>
+          <div class="option"><input type="radio" name="q6" value="b" id="q6b"><label for="q6b">George Washington</label></div>
+          <div class="option"><input type="radio" name="q6" value="c" id="q6c"><label for="q6c">Commodore Perry</label></div>
+          <div class="option"><input type="radio" name="q6" value="d" id="q6d"><label for="q6d">Ulysses Grant</label></div>
         </div>
         <div class="feedback" data-question="q6"></div>
       </div>
-      
-      <!-- Question 7 -->
+
       <div class="question-block">
         <div class="q-number">Question 7</div>
         <div class="q-text">What major event began in Japan in 1868?</div>
         <div class="options-list">
-          <div class="option">
-            <input type="radio" name="q7" value="a" id="q7a">
-            <label for="q7a">Tokugawa Rule</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q7" value="b" id="q7b">
-            <label for="q7b">Meiji Restoration</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q7" value="c" id="q7c">
-            <label for="q7c">World War I</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q7" value="d" id="q7d">
-            <label for="q7d">Heian Period</label>
-          </div>
+          <div class="option"><input type="radio" name="q7" value="a" id="q7a"><label for="q7a">Tokugawa Rule</label></div>
+          <div class="option"><input type="radio" name="q7" value="b" id="q7b"><label for="q7b">Meiji Restoration</label></div>
+          <div class="option"><input type="radio" name="q7" value="c" id="q7c"><label for="q7c">World War I</label></div>
+          <div class="option"><input type="radio" name="q7" value="d" id="q7d"><label for="q7d">Heian Period</label></div>
         </div>
         <div class="feedback" data-question="q7"></div>
       </div>
-      
-      <!-- Question 8 -->
+
       <div class="question-block">
         <div class="q-number">Question 8</div>
         <div class="q-text">What military base did Japan attack in 1941?</div>
         <div class="options-list">
-          <div class="option">
-            <input type="radio" name="q8" value="a" id="q8a">
-            <label for="q8a">Pearl Harbor</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q8" value="b" id="q8b">
-            <label for="q8b">Midway</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q8" value="c" id="q8c">
-            <label for="q8c">Okinawa</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q8" value="d" id="q8d">
-            <label for="q8d">Iwo Jima</label>
-          </div>
+          <div class="option"><input type="radio" name="q8" value="a" id="q8a"><label for="q8a">Pearl Harbor</label></div>
+          <div class="option"><input type="radio" name="q8" value="b" id="q8b"><label for="q8b">Midway</label></div>
+          <div class="option"><input type="radio" name="q8" value="c" id="q8c"><label for="q8c">Okinawa</label></div>
+          <div class="option"><input type="radio" name="q8" value="d" id="q8d"><label for="q8d">Iwo Jima</label></div>
         </div>
         <div class="feedback" data-question="q8"></div>
       </div>
-      
-      <!-- Question 9 -->
+
       <div class="question-block">
         <div class="q-number">Question 9</div>
         <div class="q-text">Which two Japanese cities were hit by atomic bombs in 1945?</div>
         <div class="options-list">
-          <div class="option">
-            <input type="radio" name="q9" value="a" id="q9a">
-            <label for="q9a">Tokyo and Kyoto</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q9" value="b" id="q9b">
-            <label for="q9b">Osaka and Kobe</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q9" value="c" id="q9c">
-            <label for="q9c">Hiroshima and Nagasaki</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q9" value="d" id="q9d">
-            <label for="q9d">Sapporo and Sendai</label>
-          </div>
+          <div class="option"><input type="radio" name="q9" value="a" id="q9a"><label for="q9a">Tokyo and Kyoto</label></div>
+          <div class="option"><input type="radio" name="q9" value="b" id="q9b"><label for="q9b">Osaka and Kobe</label></div>
+          <div class="option"><input type="radio" name="q9" value="c" id="q9c"><label for="q9c">Hiroshima and Nagasaki</label></div>
+          <div class="option"><input type="radio" name="q9" value="d" id="q9d"><label for="q9d">Sapporo and Sendai</label></div>
         </div>
         <div class="feedback" data-question="q9"></div>
       </div>
-      
-      <!-- Question 10 -->
+
       <div class="question-block">
         <div class="q-number">Question 10</div>
         <div class="q-text">In what year did Japan regain sovereignty after Allied occupation?</div>
         <div class="options-list">
-          <div class="option">
-            <input type="radio" name="q10" value="a" id="q10a">
-            <label for="q10a">1945</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q10" value="b" id="q10b">
-            <label for="q10b">1952</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q10" value="c" id="q10c">
-            <label for="q10c">1960</label>
-          </div>
-          <div class="option">
-            <input type="radio" name="q10" value="d" id="q10d">
-            <label for="q10d">1975</label>
-          </div>
+          <div class="option"><input type="radio" name="q10" value="a" id="q10a"><label for="q10a">1945</label></div>
+          <div class="option"><input type="radio" name="q10" value="b" id="q10b"><label for="q10b">1952</label></div>
+          <div class="option"><input type="radio" name="q10" value="c" id="q10c"><label for="q10c">1960</label></div>
+          <div class="option"><input type="radio" name="q10" value="d" id="q10d"><label for="q10d">1975</label></div>
         </div>
         <div class="feedback" data-question="q10"></div>
       </div>
 
     </form>
-
-    <!-- ════════════════════════════════════════════════════════════
-         END OF QUESTIONS
-         ════════════════════════════════════════════════════════════ -->
 
     <div class="controls">
       <button class="btn btn-primary" onclick="checkAnswers()">✓ Check Answers</button>
@@ -571,63 +270,38 @@
 </div>
 
 <script>
-// ════════════════════════════════════════════════════════════
-// ANSWER KEY — edit the correct answers here
-// Format: question_name: "correct_value"
-// ════════════════════════════════════════════════════════════
 const answerKey = {
-  q1: "a",  // Emperor Jimmu
-  q2: "a",  // 794 CE
-  q3: "b",  // Samurai Shogunate
-  q4: "b",  // Firearms
-  q5: "a",  // Tokugawa Ieyasu
-  q6: "c",  // Commodore Perry
-  q7: "b",  // Meiji Restoration
-  q8: "a",  // Pearl Harbor
-  q9: "c",  // Hiroshima and Nagasaki
-  q10: "b",  // 1952
+  q1: "a", q2: "a", q3: "b", q4: "b", q5: "a",
+  q6: "c", q7: "b", q8: "a", q9: "c", q10: "b",
 };
-
-// ════════════════════════════════════════════════════════════
 
 function checkAnswers() {
   const form = document.getElementById("quiz-form");
   const results = document.getElementById("results");
   const scoreEl = document.getElementById("score");
   const messageEl = document.getElementById("message");
-
   let correct = 0;
   let total = Object.keys(answerKey).length;
-
-  // Check each question
   for (const [questionName, correctAnswer] of Object.entries(answerKey)) {
     const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
     const feedbackEl = document.querySelector(`.feedback[data-question="${questionName}"]`);
-
     if (!selectedOption) {
-      // No answer selected
       feedbackEl.textContent = "⚠ Please select an answer.";
       feedbackEl.classList.remove("correct", "wrong");
-      feedbackEl.classList.add("wrong");
-      feedbackEl.classList.add("show");
+      feedbackEl.classList.add("wrong", "show");
     } else if (selectedOption.value === correctAnswer) {
-      // Correct
       correct++;
       feedbackEl.textContent = "✓ Correct!";
       feedbackEl.classList.remove("wrong");
       feedbackEl.classList.add("correct", "show");
     } else {
-      // Wrong
       feedbackEl.textContent = "✗ Incorrect. Try again or review your notes.";
       feedbackEl.classList.remove("correct");
       feedbackEl.classList.add("wrong", "show");
     }
   }
-
-  // Display results
   const percentage = Math.round((correct / total) * 100);
   scoreEl.textContent = `${correct} of ${total} correct (${percentage}%)`;
-
   if (correct === total) {
     messageEl.textContent = "🎉 Perfect score! Excellent work!";
     results.classList.remove("failed");
@@ -641,28 +315,17 @@ function checkAnswers() {
     results.classList.remove("passed");
     results.classList.add("failed", "show");
   }
-
-  // Scroll to results
   setTimeout(() => results.scrollIntoView({ behavior: "smooth" }), 200);
 }
 
 function resetQuiz() {
-  const form = document.getElementById("quiz-form");
-  const results = document.getElementById("results");
-
-  // Clear all radio buttons
-  form.reset();
-
-  // Clear all feedback
+  document.getElementById("quiz-form").reset();
   document.querySelectorAll(".feedback").forEach((el) => {
     el.textContent = "";
     el.classList.remove("correct", "wrong", "show");
   });
-
-  // Hide results
-  results.classList.remove("show");
+  document.getElementById("results").classList.remove("show");
 }
 </script>
-
 </body>
 </html>
